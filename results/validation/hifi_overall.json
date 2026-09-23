@@ -1,0 +1,18 @@
+{
+ "truth_status_counts": {
+  "HIGH_CONFIDENCE_HIFI_TRUTH": 1034,
+  "UNCALLABLE_HIFI": 3493,
+  "AMBIGUOUS_HIFI": 1453
+ },
+ "comparisons_high": 913,
+ "mixed_truth_comparisons": 0,
+ "mixture_agree": 0,
+ "motif_status": {
+  "MONO_AT": "VALIDATED_EXACT",
+  "MONO_GC": "VALIDATED_WITH_LIMITATION",
+  "DINUCLEOTIDE": "VALIDATED_WITH_LIMITATION",
+  "TRINUCLEOTIDE": "VALIDATED_EXACT",
+  "MOTIF_GE4": "VALIDATED_WITH_LIMITATION",
+  "KNOWN_PV": "UNVALIDATED_INSUFFICIENT_TRUTH"
+ }
+}
