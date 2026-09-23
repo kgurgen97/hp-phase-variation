@@ -1,4 +1,4 @@
-"""CLI: python -m g5caller {extract,call,simulate,benchmark,estimate-noise,make-rules,make-test-catalogue}"""
+"""CLI: python -m hp_phasevar {extract,call,simulate,benchmark,estimate-noise,make-rules,make-test-catalogue}"""
 import argparse
 import json
 import sys
@@ -8,7 +8,7 @@ from . import extract as ex, call as cl
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="g5caller")
+    ap = argparse.ArgumentParser(prog="hp_phasevar")
     sub = ap.add_subparsers(dest="cmd", required=True)
 
     p = sub.add_parser("extract", help="stage 1: reads -> evidence TSV (one sample = SE + PE + orphan files)")
