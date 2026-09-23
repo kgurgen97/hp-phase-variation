@@ -1,0 +1,10 @@
+param_id	value	description
+stutter_a_MONO	0.0	estimated from 65740 pure-allele observations
+stutter_b_MONO	0.003018	estimated from 65740 pure-allele observations
+stutter_a_DI	0.0	estimated from 65740 pure-allele observations
+stutter_b_DI	0.008371	estimated from 65740 pure-allele observations
+stutter_a_POLY	0.0	estimated from 65740 pure-allele observations
+stutter_b_POLY	0.000223	estimated from 65740 pure-allele observations
+stutter_up_ratio	0.6668	estimated from 65740 pure-allele observations
+stutter_k2_ratio	0.0142	estimated from 65740 pure-allele observations
+background_rate	0.001	estimated from 65740 pure-allele observations
