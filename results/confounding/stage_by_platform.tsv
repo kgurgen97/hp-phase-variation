@@ -1,0 +1,6 @@
+platform_classes	NAG	AG	IM	DYS	GC	total_correa	n_verification_statuses	verification_status_counts	n_countries	countries
+ILLUMINA_SHORT	40	128	32	1	17	218	5	CONFLICT:133;NOT_HIGH_PRIORITY:8;REPOSITORY_ONLY:43;SOURCE_VERIFIED_FULL:13;SOURCE_VERIFIED_PARTIAL:21	9	China;Colombia;France;Germany;Iran;Mexico;Nicaragua;Singapore;Vietnam
+ILLUMINA_SHORT;ONT_LONG	22	17	0	0	0	39	1	CONFLICT:39	1	China
+ONT_LONG	6	0	1	0	2	9	1	CONFLICT:9	2	Colombia;France
+PACBIO_LONG	0	0	0	0	23	23	2	CONFLICT:18;SOURCE_VERIFIED_PARTIAL:5	1	Japan
+UNKNOWN	199	106	53	0	146	504	5	CONFLICT:55;NOT_HIGH_PRIORITY:8;REPOSITORY_ONLY:83;SOURCE_VERIFIED_FULL:67;SOURCE_VERIFIED_PARTIAL:291	22	Belgium;Brazil;Canada;China;Colombia;France;Germany;Honduras;India;Iran;Ireland;Japan;Malaysia;Mexico;Nicaragua;Russia;Singapore;South Korea;Sweden;UNKNOWN;United Kingdom;United States
