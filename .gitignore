@@ -1,0 +1,34 @@
+# Sequencing data
+data/raw/
+data/temporary/
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.sra
+*.bam
+*.bai
+*.cram
+*.crai
+*.sam
+*.fast5
+*.pod5
+
+# Regenerable intermediate outputs
+work/
+tmp/
+logs/
+*.log
+*.tmp
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Notebooks and editors
+.ipynb_checkpoints/
+.DS_Store
+.idea/
+.vscode/
