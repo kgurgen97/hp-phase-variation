@@ -1,6 +1,10 @@
-"""Unit tests (stdlib unittest). Run from the code/ directory:
-    python3 -m unittest discover -s ../tests -t .. -v      (or)   PYTHONPATH=code python3 -m unittest discover -s tests -v
-Set G5_TEST_FASTA to the H. pylori 26695 FASTA(.gz) if it is not at data/reference/g4_identity/."""
+"""Unit tests for the repeat-length caller.
+
+Run with:
+    python -m unittest discover -s tests -v
+
+Set HP_PHASEVAR_TEST_FASTA to an H. pylori 26695 FASTA(.gz) to enable
+the reference-dependent catalogue tests."""
 import gzip
 import os
 import sys
@@ -10,14 +14,14 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve()
 ROOT = HERE.parents[1]
-sys.path.insert(0, str(ROOT / "scripts" / "g5"))
+sys.path.insert(0, str(ROOT / "src"))
 
-from g5caller import common, extract, call, functional, noise, simulate, benchmark, testcat  # noqa: E402
-from g5caller.common import Params, Member, revcomp, canonical_motif  # noqa: E402
+from hp_phasevar import common, extract, call, functional, noise, simulate, benchmark, testcat  # noqa: E402
+from hp_phasevar.common import Params, Member, revcomp, canonical_motif  # noqa: E402
 
 FASTA = os.environ.get("G5_TEST_FASTA") or str(
     ROOT / "data/reference/g4_identity/GCF_000008525.1_ASM852v1_genomic.fna.gz")
-TMP = tempfile.mkdtemp(prefix="g5test_")
+TMP = tempfile.mkdtemp(prefix="hp_phasevar_test_")
 _CACHE = {}
 
 
