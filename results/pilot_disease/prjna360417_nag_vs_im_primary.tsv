@@ -1,0 +1,5 @@
+locus_id	n_a	n_b	median_a	median_b	mean_diff_b_minus_a	cliffs_delta	boot_ci_lo	boot_ci_hi	exact_p	n_permutations	bh_q
+HPL00103	5	6	17	16.5	-0.2333	-0.0333	-2	1.5333	0.87013	462	1.0
+HPL00390	5	5	8	8	0.2	0.2	-0.4	0.8	1.0	252	1.0
+HPL00393	5	6	6	6.5	-0.1	0.0	-0.9	0.6667	1.0	462	1.0
+HPL00709	5	4	7	7.0	-0.05	-0.05	-0.55	0.4	1.0	126	1.0
