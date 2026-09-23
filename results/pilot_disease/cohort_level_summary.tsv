@@ -1,0 +1,4 @@
+cohort	contrast	n_primary_passed_screen	n_provisional_passed_screen	n_loci_available	min_pairwise_coverage	max_pairwise_coverage	strict_computable	strict_pseudo_F	strict_R2	strict_exact_p	strict_n_permutations	strict_boot_r2_ci_lo	strict_boot_r2_ci_hi	diagnostic_pseudo_F	diagnostic_R2	diagnostic_exact_p	diagnostic_n_permutations	diagnostic_boot_r2_ci_lo	diagnostic_boot_r2_ci_hi	diagnostic_label
+PRJNA360417	NAG_vs_IM(5v6)	4	0	4	2	4	False	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	0.2992	0.0322	0.770563	462	-0.0209	0.3979	BELOW_PRESPECIFIED_COVERAGE_FLOOR_DIAGNOSTIC_ONLY
+PRJNA678459	AG_vs_GC(5v5)_EXPLORATORY	6	1	6	4	6	False	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	NOT_COMPUTABLE	1.9618	0.1969	0.142857	252	0.1114	0.5698	BELOW_PRESPECIFIED_COVERAGE_FLOOR_DIAGNOSTIC_ONLY
+PRJNA1103397	GC_only_descriptive_NO_TEST	0	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NA	NO_CONTRAST
