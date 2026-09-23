@@ -1,0 +1,26 @@
+{
+ "all": {
+  "n": 2720,
+  "callable": 1780,
+  "uncallable_rate": 0.3456,
+  "exact_allele_accuracy": 0.9871,
+  "false_confident_call_rate": 0.0094,
+  "n_confident": 1595,
+  "onoff_truth_callable": 210,
+  "onoff_state_correct": 177,
+  "onoff_state_wrong_confident": 4,
+  "onoff_state_accuracy": 0.8429
+ },
+ "pure": {
+  "n": 680,
+  "callable": 450,
+  "uncallable_rate": 0.3382,
+  "exact_allele_accuracy": 0.9889,
+  "false_confident_call_rate": 0.0076,
+  "n_confident": 393,
+  "onoff_truth_callable": 51,
+  "onoff_state_correct": 50,
+  "onoff_state_wrong_confident": 1,
+  "onoff_state_accuracy": 0.9804
+ }
+}
