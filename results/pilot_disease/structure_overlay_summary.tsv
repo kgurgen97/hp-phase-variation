@@ -1,0 +1,3 @@
+cohort	method	n_ag	n_gc	pseudo_F	R2	exact_p	n_permutations	all_10_samples_nearest_to_same_reference_genome	interpretation
+PRJNA678459	SCREENING_STRUCTURE_ONLY_read_based_kmer_minhash_bounded_30000pairs_disease_blind_G7followup	5	5	1.0506	0.1161	0.031746	252	True	Descriptive only; AG/GC labels show a nominal association on this disease-blind screening-structure metric (p<=0.05) -- this would be a confounding warning, not evidence of a PV-disease effect, and is reported regardless of direction (R20, R22).
+PRJNA360417	NOT_PERFORMED	5	6	NA	NA	NA	NA	NA	No existing disease-blind structure result for this study and its raw reads are no longer local; RAW_READ_DOWNLOAD not authorized in this gate (R19). Disclosed gap, not approximated.
