@@ -36,7 +36,7 @@ Current journal guidance requires or strongly expects:
 | Keywords | ADDED |
 | Data Summary | ADDED |
 | Impact Statement | ADDED |
-| Core literature layer | IN PROGRESS / verified references being added |
+| Core literature layer | COMPLETE first pass / core references web-verified |
 | Supplementary Methods | COMPLETE first draft |
 | Supplementary table map | COMPLETE |
 | Author list / affiliations | HUMAN INPUT REQUIRED |
