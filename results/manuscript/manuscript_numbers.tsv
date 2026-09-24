@@ -1,4 +1,5 @@
 metric	value	numerator	denominator	unit	source_path	validation	note
+reference_panel_genomes	8			genomes	metadata/loci/reference_panel.tsv	computed	publication export of the frozen eight-genome RefSeq panel
 catalogue_loci	1405			count	metadata/loci/repeat_catalogue.tsv	computed	distinct locus_id
 catalogue_members	4009			count	metadata/loci/repeat_catalogue.tsv	computed	rows excluding header
 caller_eligible_loci	1196			count	metadata/loci/repeat_catalogue.tsv	computed	locus with any caller_eligible YES member
