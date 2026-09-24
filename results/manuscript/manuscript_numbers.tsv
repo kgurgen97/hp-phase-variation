@@ -54,3 +54,12 @@ structure_prjna678459_r2	0.1161			fraction	results/pilot_disease/structure_overl
 structure_prjna678459_exact_p	0.031746			p_value	results/pilot_disease/structure_overlay_summary.tsv	computed	confounding caution flag, not repeat-disease finding
 structure_prjna678459_permutations	252			permutations	results/pilot_disease/structure_overlay_summary.tsv	computed	exact exhaustive label permutations
 structure_prjna360417	NOT_PERFORMED			status	results/pilot_disease/structure_overlay_summary.tsv	computed	retained limitation; no new computation authorized
+synthetic_callable_fraction	0.654411764706	1780	2720	fraction	results/validation/synthetic_authoritative_counts.tsv	computed	callable / empirical total
+synthetic_confident_fraction	0.89606741573	1595	1780	fraction	results/validation/synthetic_authoritative_counts.tsv	computed	HIGH/MEDIUM confident / callable
+hifi_validation_isolates	5			isolates	metadata/validation/hifi_manifest.tsv	computed	unique isolates with LONG_HIFI entry
+hifi_exact_fraction	0.997809419496	911	913	fraction	results/validation/hifi_short_vs_hifi.tsv	computed	exact / high-confidence comparisons
+hifi_nonreference_exact_fraction	0.97619047619	82	84	fraction	results/validation/hifi_nonreference_summary.tsv	computed	exact / non-reference comparisons
+prjna360417_min_pairwise_coverage	2			loci	results/pilot_disease/cohort_level_summary.tsv	computed	below-floor diagnostic matrix coverage
+prjna360417_max_pairwise_coverage	4			loci	results/pilot_disease/cohort_level_summary.tsv	computed	below-floor diagnostic matrix coverage
+prjna678459_min_pairwise_coverage	4			loci	results/pilot_disease/cohort_level_summary.tsv	computed	below-floor diagnostic matrix coverage
+prjna678459_max_pairwise_coverage	6			loci	results/pilot_disease/cohort_level_summary.tsv	computed	below-floor diagnostic matrix coverage
