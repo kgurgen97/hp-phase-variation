@@ -17,3 +17,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: python -m unittest discover -s tests
       - run: python analysis/check_publication_results.py
+      - run: python analysis/check_manuscript_numbers.py

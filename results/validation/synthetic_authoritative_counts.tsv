@@ -1,0 +1,7 @@
+metric	value	numerator	denominator	source	note
+empirical_total	2720			results/g5/g5_synthetic_benchmark.tsv	EMPIRICAL stutter mode.
+callable	1780	1780	2720	results/g5/g5_synthetic_benchmark.tsv	Callable comparisons.
+exact_dominant	0.9871	1757	1780	results/g5/g5_synthetic_benchmark.tsv	Exact dominant repeat-length allele.
+confident	1595	1595	1780	results/g5/g5_synthetic_benchmark.tsv	HIGH or MEDIUM confidence among callable comparisons.
+false_confident_wrong	0.0094	15	1595	results/g5/g5_synthetic_benchmark.tsv	Wrong dominant allele among HIGH/MEDIUM calls.
+uncallable_rate	0.3456	940	2720	results/g5/g5_synthetic_summary_EMPIRICAL_overall.json	Tracked authoritative overall JSON.

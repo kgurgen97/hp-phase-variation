@@ -1,0 +1,8 @@
+stratum	comparisons_total	reference_length_comparisons	reference_length_exact	nonreference_comparisons	nonreference_exact	nonreference_exact_concordance	nonreference_samples	nonreference_distinct_loci	nonreference_truth_vs_reference_bp	nonreference_short_minus_hifi_delta_bp	note
+MONO_AT	737	657	657	80	78	0.975	5	34	-3:5;-2:29;-1:38;1:2;3:4;6:2	-6:2;0:78	
+MONO_GC	32	29	29	3	3	1.0	3	1	-1:3	0:3	
+DINUCLEOTIDE	23	23	23	0	0	NA	0	0		NA	no non-reference variation observed; class NOT validated for non-reference alleles
+TRINUCLEOTIDE	108	107	107	1	1	1.0	1	1	-9:1	0:1	
+MOTIF_GE4	13	13	13	0	0	NA	0	0		NA	no non-reference variation observed; class NOT validated for non-reference alleles
+KNOWN_PV	5	5	5	0	0	NA	0	0		NA	no non-reference variation observed; class NOT validated for non-reference alleles
+ALL_HIGH_CONFIDENCE (not a validation of any single class)	913	829	829	84	82	0.9762	5	36	-9:1;-3:5;-2:29;-1:41;1:2;3:4;6:2	-6:2;0:82	

@@ -1,0 +1,55 @@
+metric	value	numerator	denominator	unit	source_path	validation	note
+catalogue_loci	1405			count	metadata/loci/repeat_catalogue.tsv	computed	distinct locus_id
+catalogue_members	4009			count	metadata/loci/repeat_catalogue.tsv	computed	rows excluding header
+caller_eligible_loci	1196			count	metadata/loci/repeat_catalogue.tsv	computed	locus with any caller_eligible YES member
+primary_technical_loci	261			count	metadata/loci/analysis_universe.tsv	computed	g7_locus_class PRIMARY_TECHNICAL
+provisional_technical_loci	39			count	metadata/loci/analysis_universe.tsv	computed	g7_locus_class PROVISIONAL_TECHNICAL
+primary_ineligible_loci	1105			count	metadata/loci/analysis_universe.tsv	computed	g7_locus_class PRIMARY_INELIGIBLE
+primary_repeat_only_loci	243			count	metadata/loci/repeat_catalogue.tsv + metadata/loci/analysis_universe.tsv	computed	single member-level evidence class REPEAT_ONLY within PRIMARY
+primary_strong_pv_candidate_loci	15			count	metadata/loci/repeat_catalogue.tsv + metadata/loci/analysis_universe.tsv	computed	single member-level evidence class STRONG_PV_CANDIDATE within PRIMARY
+primary_mixed_evidence_loci	3			count	metadata/loci/repeat_catalogue.tsv + metadata/loci/analysis_universe.tsv	computed	more than one member-level evidence class within PRIMARY
+primary_known_pv_loci	0			count	metadata/loci/analysis_universe.tsv	computed	known_pv YES within PRIMARY
+boundary_stable_loci	400			count	metadata/validation/catalogue_boundary_audit.tsv	computed	audit_status BOUNDARY_STABLE
+boundary_ambiguous_loci	48			count	metadata/validation/catalogue_boundary_audit.tsv	computed	audit_status BOUNDARY_AMBIGUOUS
+orthology_ambiguous_loci	497			count	metadata/validation/catalogue_boundary_audit.tsv	computed	audit_status ORTHOLOGY_AMBIGUOUS
+insufficient_to_resolve_loci	460			count	metadata/validation/catalogue_boundary_audit.tsv	computed	audit_status INSUFFICIENT_TO_RESOLVE
+synthetic_empirical_total	2720			comparisons	results/validation/synthetic_authoritative_counts.tsv	frozen_count	EMPIRICAL stutter mode
+synthetic_callable	1780	1780	2720	comparisons	results/validation/synthetic_authoritative_counts.tsv	frozen_count	callable comparisons
+synthetic_exact_dominant	1757	1757	1780	comparisons	results/validation/synthetic_authoritative_counts.tsv	frozen_count	exact dominant repeat-length allele
+synthetic_exact_dominant_fraction	0.9871	1757	1780	fraction	results/validation/synthetic_authoritative_counts.tsv	frozen_count	report numerator/denominator plus percentage
+synthetic_confident	1595	1595	1780	comparisons	results/validation/synthetic_authoritative_counts.tsv	frozen_count	HIGH/MEDIUM confidence
+synthetic_false_confident_wrong	15	15	1595	comparisons	results/validation/synthetic_authoritative_counts.tsv	frozen_count	wrong dominant allele among HIGH/MEDIUM calls
+synthetic_false_confident_wrong_fraction	0.0094	15	1595	fraction	results/validation/synthetic_authoritative_counts.tsv	frozen_count	report numerator/denominator plus percentage
+synthetic_uncallable_rate	0.3456	940	2720	fraction	results/validation/synthetic_overall.json	computed	tracked authoritative overall JSON
+hifi_truth_high_confidence	1034			isolate_locus_pairs	results/validation/hifi_overall.json	computed	truth_status_counts
+hifi_truth_ambiguous	1453			isolate_locus_pairs	results/validation/hifi_overall.json	computed	truth_status_counts
+hifi_truth_uncallable	3493			isolate_locus_pairs	results/validation/hifi_overall.json	computed	truth_status_counts
+hifi_truth_total	5980			isolate_locus_pairs	results/validation/hifi_overall.json	computed	sum truth-status counts
+hifi_high_confidence_comparisons	913			comparisons	results/validation/hifi_short_vs_hifi.tsv	computed	comparison_universe YES and HIGH_CONFIDENCE_HIFI_TRUTH
+hifi_exact	911	911	913	comparisons	results/validation/hifi_short_vs_hifi.tsv	computed	EXACT_CONCORDANT
+hifi_nonreference_comparisons	84			comparisons	results/validation/hifi_nonreference_summary.tsv	computed	ALL_HIGH_CONFIDENCE row
+hifi_nonreference_exact	82	82	84	comparisons	results/validation/hifi_nonreference_summary.tsv	computed	ALL_HIGH_CONFIDENCE row
+phase1_callable_union_loci	909			loci	results/callability/summary.tsv	manifest_only	direct recount requires full Phase-1 call matrix
+platform_study_confounded_callability_loci	182			loci	results/callability/platform_transfer.tsv	computed	callability_class PLATFORM_CONFOUNDED_CALLABILITY; descriptive technical association, not causal platform effect
+confounding_correa_studies	45			studies	results/confounding/confounding_matrix.tsv	computed	rows
+confounding_correa_biosamples	793			biosamples	results/confounding/confounding_matrix.tsv	computed	sum n_correa_biosamples
+confounding_single_country_studies	41	41	45	studies	results/confounding/confounding_matrix.tsv	computed	current tracked table; supersedes stale 44/45 handoff number
+confounding_multicountry_studies	4	4	45	studies	results/confounding/confounding_matrix.tsv	computed	PRJNA395900, PRJNA479414, PRJNA482300, PRJNA601302
+prjna360417_nag	5			patients	results/pilot_disease/summary.json	computed	n_nag
+prjna360417_im	6			patients	results/pilot_disease/summary.json	computed	n_im
+prjna360417_primary_screen_pass	4	4	261	loci	results/pilot_disease/cohort_level_summary.tsv	computed	PRIMARY screen
+prjna360417_strict_computable	FALSE			status	results/pilot_disease/cohort_level_summary.tsv	computed	>=10 jointly callable loci per pair floor not met
+prjna360417_diagnostic_exact_p	0.770563			p_value	results/pilot_disease/cohort_level_summary.tsv	computed	diagnostic only
+prjna678459_ag	5			patients	results/pilot_disease/summary.json	computed	n_ag
+prjna678459_gc	5			patients	results/pilot_disease/summary.json	computed	n_gc
+prjna678459_primary_screen_pass	6	6	261	loci	results/pilot_disease/cohort_level_summary.tsv	computed	PRIMARY screen
+prjna678459_provisional_screen_pass	1	1	39	loci	results/pilot_disease/cohort_level_summary.tsv	computed	PROVISIONAL screen
+prjna678459_strict_computable	FALSE			status	results/pilot_disease/cohort_level_summary.tsv	computed	>=10 jointly callable loci per pair floor not met
+prjna678459_diagnostic_exact_p	0.142857			p_value	results/pilot_disease/cohort_level_summary.tsv	computed	diagnostic only
+prjna1103397_gc	6			patients	results/pilot_disease/summary.json	computed	one selected isolate per patient stated in publication; explicit patient IDs unavailable
+prjna1103397_primary_screen_pass	0	0	261	loci	results/pilot_disease/cohort_level_summary.tsv	computed	GC-only, no contrast
+structure_prjna678459_pseudo_f	1.0506			statistic	results/pilot_disease/structure_overlay_summary.tsv	computed	SCREENING_STRUCTURE_ONLY
+structure_prjna678459_r2	0.1161			fraction	results/pilot_disease/structure_overlay_summary.tsv	computed	SCREENING_STRUCTURE_ONLY
+structure_prjna678459_exact_p	0.031746			p_value	results/pilot_disease/structure_overlay_summary.tsv	computed	confounding caution flag, not repeat-disease finding
+structure_prjna678459_permutations	252			permutations	results/pilot_disease/structure_overlay_summary.tsv	computed	exact exhaustive label permutations
+structure_prjna360417	NOT_PERFORMED			status	results/pilot_disease/structure_overlay_summary.tsv	computed	retained limitation; no new computation authorized

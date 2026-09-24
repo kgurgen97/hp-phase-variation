@@ -1,0 +1,16 @@
+historical_path	publication_path	note
+metadata/g5/g5_repeat_catalogue.tsv	metadata/loci/repeat_catalogue.tsv	same authoritative blob
+metadata/g5/g5_reference_panel.tsv	metadata/loci/reference_panel.tsv	normalized publication path
+metadata/g5/g5_repeat_flanks.tsv	metadata/loci/repeat_flanks.tsv	normalized publication path
+metadata/g5/g5_caller_rules.tsv	config/caller_rules.tsv	same frozen rules
+metadata/g6/g6_catalogue_boundary_audit.tsv	metadata/validation/catalogue_boundary_audit.tsv	normalized publication path
+metadata/g6/g6_motif_validation_status.tsv	metadata/validation/motif_validation_status.tsv	normalized publication path
+metadata/g7/g7_locus_analysis_universe.tsv	metadata/loci/analysis_universe.tsv	normalized publication path
+metadata/g8/g8_analysis_rules.tsv	config/pilot_analysis_rules.tsv	same frozen rules
+results/g5/g5_synthetic_summary_EMPIRICAL_overall.json	results/validation/synthetic_overall.json	same tracked summary
+results/g6/g6_hifi_overall.json	results/validation/hifi_overall.json	same tracked summary
+results/g6/g6_hifi_short_vs_hifi_comparison.tsv	results/validation/hifi_short_vs_hifi.tsv	same authoritative comparison table
+results/g7/g7_confounding_matrix.tsv	results/confounding/confounding_matrix.tsv	normalized publication path
+results/g8/g8_locus_screen.tsv	results/pilot_disease/locus_screen.tsv	normalized publication path
+results/g8/g8_cohort_level_summary.tsv	results/pilot_disease/cohort_level_summary.tsv	normalized publication path
+results/g8/g8_structure_overlay_summary.tsv	results/pilot_disease/structure_overlay_summary.tsv	normalized publication path
