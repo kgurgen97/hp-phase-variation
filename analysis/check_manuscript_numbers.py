@@ -70,21 +70,14 @@ def main():
     expect("insufficient_to_resolve_loci", audit["INSUFFICIENT_TO_RESOLVE"])
 
     synthetic = {r["metric"]: r for r in read_tsv("results/validation/synthetic_authoritative_counts.tsv")}
-    for metric in (
-        "empirical_total", "callable", "exact_dominant", "confident",
-        "false_confident_wrong", "uncallable_rate"
-    ):
-        target = {
-            "empirical_total": "synthetic_empirical_total",
-            "callable": "synthetic_callable",
-            "exact_dominant": "synthetic_exact_dominant",
-            "confident": "synthetic_confident",
-            "false_confident_wrong": "synthetic_false_confident_wrong",
-            "uncallable_rate": "synthetic_uncallable_rate",
-        }[metric]
-        expect(target, synthetic[metric]["value"])
+    expect("synthetic_empirical_total", synthetic["empirical_total"]["value"])
+    expect("synthetic_callable", synthetic["callable"]["value"])
+    expect("synthetic_exact_dominant", synthetic["exact_dominant"]["numerator"])
     expect("synthetic_exact_dominant_fraction", synthetic["exact_dominant"]["value"])
+    expect("synthetic_confident", synthetic["confident"]["value"])
+    expect("synthetic_false_confident_wrong", synthetic["false_confident_wrong"]["numerator"])
     expect("synthetic_false_confident_wrong_fraction", synthetic["false_confident_wrong"]["value"])
+    expect("synthetic_uncallable_rate", synthetic["uncallable_rate"]["value"])
     sj = json.loads((ROOT / "results/validation/synthetic_overall.json").read_text())
     expect("synthetic_uncallable_rate", sj["all"]["uncallable_rate"])
 
