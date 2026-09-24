@@ -34,7 +34,7 @@ The historical development environment was only partially recorded. We therefore
 
 ### Multi-reference repeat catalogue
 
-Repeat discovery was performed across a frozen eight-genome *H. pylori* reference panel. Candidate repeat tracts were identified under frozen discovery rules and reconciled across references into locus-level groups. The resulting catalogue records both a locus identifier and member-level reference representation.
+Repeat discovery was performed across a frozen eight-genome *H. pylori* reference panel. Motifs of 1–6 nt were considered. Pure homopolymers required at least 8 bases; dinucleotide repeats required at least 5 copies; 3–4 nt motifs required at least 4 copies; and 5–6 nt motifs required at least 3 copies and a total tract length of at least 12 bp. Motifs were canonicalized across rotations and strands, and loci longer than 100 bp were retained in the catalogue but were not caller-eligible. Candidate repeat tracts were reconciled across references into locus-level groups using frozen flank- and annotation-based equivalence rules. The resulting catalogue records both a locus identifier and member-level reference representation.
 
 The final catalogue contained 1,405 loci represented by 4,009 catalogue members. A locus was counted as caller-eligible when at least one of its catalogue members satisfied the caller-eligibility criteria. This produced 1,196 caller-eligible loci.
 
@@ -48,7 +48,7 @@ The audit was explicitly conservative. A locus could be technically measurable i
 
 ### Short-read repeat-length caller
 
-The caller estimates repeat-length alleles from reads overlapping the repeat tract and its flanking sequence. Frozen caller rules define the required evidence, confidence class, and conditions that render a locus uncallable. Real-sample outputs are interpreted as repeat-length alleles. They are not converted automatically into sample-specific ON/OFF functional states because functional consequences depend on locus-specific sequence context and biological validation.
+The caller estimates repeat-length alleles from fragments spanning the repeat tract between flanking sequence anchors. The frozen implementation uses 25-bp anchors, permits at most two mismatches per anchor during extraction and at most three total anchor mismatches at the call stage, requires mean anchor base quality of at least 20, and requires at least eight filtered spanning fragments for a callable locus. The two most frequent unit-aligned alleles must account for at least 80% of supporting reads and the dominant allele for at least 40%; excess off-unit signal or diffuse support renders the locus uncallable. Confidence classes additionally use read depth, strand balance, the Wilson lower bound on dominant-allele fraction, and a frozen stutter/noise model estimated during development. Real-sample outputs are interpreted as repeat-length alleles. They are not converted automatically into sample-specific ON/OFF functional states because functional consequences depend on locus-specific sequence context and biological validation.
 
 ### Synthetic benchmark
 
@@ -76,15 +76,15 @@ Phase-1 callability was also compared across study/platform contexts. Loci label
 
 ### Pilot disease analysis
 
-The disease application was deliberately restricted to cohorts that could support within-study contrasts under frozen metadata and independence rules. Three cohorts entered the final pilot package.
+The disease application was deliberately restricted to cohorts that could support within-study contrasts under frozen metadata and independence rules. Primary disease analysis used only the 261 frozen PRIMARY_TECHNICAL mono-A/T loci; the 39 PROVISIONAL_TECHNICAL loci were kept in a separately labelled sensitivity layer and were never merged into the primary testing family. Three cohorts entered the final pilot package.
 
-PRJNA360417 provided a NAG-versus-IM contrast with 5 and 6 patients, respectively. PRJNA678459 provided an AG-versus-GC contrast with 5 and 5 patients. PRJNA1103397 contributed six selected GC isolates; the source publication reported one selected isolate per patient, but explicit patient identifiers were unavailable in the frozen metadata. This cohort did not provide a usable within-cohort disease contrast in the frozen analysis.
+PRJNA360417 provided a NAG-versus-IM contrast with 5 and 6 patients, respectively. PRJNA678459 provided an AG-versus-GC contrast with 5 and 5 repository-resolved independent sample units and was retained as a standalone exploratory, lower-provenance contrast. Its frozen caller input had been generated disease-blind from a bounded subsample of at most 500,000 read fragments per sample; the caller was not rerun or extended for the disease analysis. PRJNA1103397 contributed six selected GC isolates; the source publication reported one selected isolate per patient, but explicit patient identifiers were unavailable in the frozen metadata. This cohort did not provide a usable within-cohort disease contrast in the frozen analysis.
 
-The pre-specified strict multivariate endpoint required at least 10 jointly callable loci for each sample pair entering the distance-based analysis. This floor was fixed before final disease-association inspection. When the floor was not met, the strict endpoint was declared NOT_COMPUTABLE. Below-floor permutation results, where available, were retained only as diagnostics and not promoted to inferential disease findings.
+Before disease labels were overlaid, each within-cohort contrast used the same frozen locus screen: overall callability of at least 0.80 across the contrast samples, at least two observed dominant repeat lengths among callable samples, and a minor-allele count of at least two. Failing loci were excluded without imputation or recoding. Pairwise repeat-allele distance was then defined as the fraction of jointly callable screened primary loci at which the two samples had different dominant repeat lengths. The pre-specified strict endpoint required at least 10 jointly callable loci for every sample pair retained in the distance matrix; otherwise the pair was undefined. Group separation used PERMANOVA statistics with exhaustive enumeration of all label allocations compatible with the observed group sizes, and R² uncertainty was summarized by 2,000 stratified bootstrap replicates with the frozen random seed. This floor and all screening rules were fixed before final disease-association inspection. When the floor was not met, the strict endpoint was declared NOT_COMPUTABLE. Below-floor permutation results, where available, were retained only as diagnostics and not promoted to inferential disease findings.
 
 ### Population-structure diagnostic
 
-A k-mer/MinHash-based distance analysis was used as a screening-level structure diagnostic for PRJNA678459; MinHash sketching provides an efficient approximation to whole-genome sequence distance [14]. This diagnostic was designed to identify whether disease labels aligned with detectable genomic structure; it was not treated as a substitute for an ancestry-adjusted association model. PRJNA360417 did not receive a completed structure overlay and remains explicitly marked NOT_PERFORMED.
+A disease-blind k-mer/MinHash distance analysis was used as a screening-level structure diagnostic for PRJNA678459; MinHash sketching provides an efficient approximation to genome-scale sequence distance [14]. The frozen implementation used canonical 21-mers, a bottom-1,000 sketch with deterministic zlib.crc32 hashing, and the first 30,000 read pairs per PRJNA678459 sample, positioning those samples relative to the existing 32-genome G7 screening panel. Disease labels were overlaid only after the distance matrix had been generated. This diagnostic was designed to identify whether disease labels aligned with detectable genomic structure; it was not treated as a phylogeny, an ancestry-adjusted association model, or a definitive confounding correction. PRJNA360417 did not receive a completed structure overlay and remains explicitly marked NOT_PERFORMED.
 
 ## Results
 
@@ -162,7 +162,7 @@ Third, the clean publication repository does not duplicate the 17.87 MB Phase-1 
 
 Fourth, the exact historical development environment was not fully locked. The publication package provides a newly tested baseline rather than reconstructing undocumented historical package versions.
 
-Fifth, the pilot disease cohorts are too small and technically sparse for definitive association testing. The diagnostic permutation statistics reported here must not be treated as primary inferential endpoints.
+Fifth, the pilot disease cohorts are too small and technically sparse for definitive association testing. In addition, the frozen PRJNA678459 caller and structure inputs were intentionally bounded to 500,000 read fragments and 30,000 read pairs per sample, respectively, during the disease-blind G7 follow-up; they should not be represented as full-depth analyses. The diagnostic permutation statistics reported here must not be treated as primary inferential endpoints.
 
 ## Conclusions
 
