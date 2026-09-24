@@ -1,0 +1,51 @@
+{
+  "provenance": {
+    "reference": "BostonGene/MFP portraits/plotting.py",
+    "reference_commit": "4debc39bb1bae10dfc550ec9fcb1c653d722c773",
+    "method": "Exact categorical colors reproduced from matplotlib.cm.rainbow(np.linspace(0, 0.92, n)); heatmap reference is matplotlib.cm.coolwarm. Published Bagaev 2021, Yudina 2025, and Stupichev 2025 figure previews were reviewed for layout density and restrained use of saturated accents.",
+    "note": "Reference-derived style only; no scientific meaning is inherited from the source papers."
+  },
+  "canvas": {
+    "background": "#ffffff",
+    "foreground": "#202124",
+    "muted_text": "#5f6368",
+    "grid": "#dfe3e8",
+    "panel_border": "#c7ccd1"
+  },
+  "categorical_reference": {
+    "n4": ["#8000ff", "#1dd1e2", "#bbee91", "#ff3e1f"],
+    "n5": ["#8000ff", "#0ca7ef", "#6afdc0", "#e0d377", "#ff3e1f"],
+    "n6": ["#8000ff", "#218cf4", "#3dead5", "#9bfba5", "#f9bb66", "#ff3e1f"]
+  },
+  "semantic": {
+    "primary": "#8000ff",
+    "provisional": "#1dd1e2",
+    "eligible": "#6afdc0",
+    "neutral": "#aeb4bb",
+    "ineligible": "#d7dadd",
+    "caution": "#f9bb66",
+    "failure": "#ff3e1f",
+    "known_pv": "#218cf4",
+    "repeat_only": "#6afdc0",
+    "strong_pv_candidate": "#8000ff",
+    "mixed_evidence": "#f9bb66"
+  },
+  "heatmap": {
+    "cmap": "coolwarm",
+    "anchors": ["#3b4cc0", "#8db0fe", "#dddcdc", "#f4987a", "#b40426"]
+  },
+  "typography": {
+    "font_family": "DejaVu Sans",
+    "title_size": 11,
+    "label_size": 9,
+    "tick_size": 8,
+    "annotation_size": 8,
+    "panel_label_size": 12
+  },
+  "export": {
+    "dpi": 300,
+    "svg": true,
+    "pdf": true,
+    "png": true
+  }
+}
