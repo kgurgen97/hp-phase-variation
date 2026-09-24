@@ -207,7 +207,12 @@ def figure2(numbers, style, outdir):
     exact_n = n_int(numbers, "synthetic_exact_dominant")
     confident_n = n_int(numbers, "synthetic_confident")
     false_n = n_int(numbers, "synthetic_false_confident_wrong")
-    rate_labels = ["Callable", "Exact among callable", "Confident among callable", "Wrong among confident"]
+    rate_labels = [
+        "Callable  [1780/2720]",
+        "Exact among callable  [1757/1780]",
+        "Confident among callable  [1595/1780]",
+        "Wrong among confident  [15/1595]",
+    ]
     rate_vals = [
         pct(callable_n, empirical_total),
         pct(exact_n, callable_n),
@@ -219,9 +224,6 @@ def figure2(numbers, style, outdir):
         [sem["eligible"], sem["primary"], sem["provisional"], sem["failure"]],
         "Synthetic empirical benchmark", "Percent", value_fmt="{:.1f}%", xmax=108
     )
-    denoms = ["1780/2720", "1757/1780", "1595/1780", "15/1595"]
-    for i, d in enumerate(denoms):
-        ax.text(1.5, i, d, va="center", ha="left", fontsize=6.8, color=style["canvas"]["muted_text"])
     panel_label(ax, "A", style)
 
     ax = axes[0, 1]
@@ -274,13 +276,11 @@ def figure2(numbers, style, outdir):
     ax.set_xlabel("Comparisons")
     ax.set_title("Non-reference validation coverage", pad=6)
     clean_ax(ax, "x")
-    ax.legend(frameon=False, fontsize=6.8, loc="lower right")
-    ax.text(
-        0.98, 0.04,
-        "Zero = no observed non-reference truth; not validation.",
-        transform=ax.transAxes, ha="right", va="bottom",
-        fontsize=6.7, color=style["canvas"]["muted_text"]
-    )
+    ax.legend(frameon=False, fontsize=6.8, loc="upper right")
+    for yi, total in enumerate(totals):
+        if total == 0:
+            ax.text(0.8, yi, "0", va="center", ha="left", fontsize=7.2,
+                    color=style["canvas"]["muted_text"])
     panel_label(ax, "D", style)
 
     fig.suptitle("Figure 2. Technical validation of repeat-length calling", fontsize=12)
@@ -289,12 +289,12 @@ def figure2(numbers, style, outdir):
 
 def figure3(numbers, style, outdir):
     sem = style["semantic"]
-    fig, axes = plt.subplots(2, 2, figsize=(7.5, 5.9), layout="constrained")
+    fig, axes = plt.subplots(2, 2, figsize=(8.6, 5.9), layout="constrained")
 
     ax = axes[0, 0]
     horizontal_bars(
         ax,
-        ["Stable", "Boundary ambiguous", "Orthology ambiguous", "Insufficient to resolve"],
+        ["Stable", "Boundary ambig.", "Orthology ambig.", "Insufficient"],
         [
             n_int(numbers, "boundary_stable_loci"),
             n_int(numbers, "boundary_ambiguous_loci"),
@@ -319,7 +319,7 @@ def figure3(numbers, style, outdir):
         "CALLABLE_BOTH": "Callable both",
         "PARTIAL": "Partial",
         "UNCALLABLE_BOTH": "Uncallable both",
-        "PLATFORM_CONFOUNDED_CALLABILITY": "Platform/study-confounded",
+        "PLATFORM_CONFOUNDED_CALLABILITY": "Confounded label",
         "NA": "NA",
     }
     labels = [pretty.get(k, k.replace("_", " ").title()) for k in order]
@@ -333,12 +333,6 @@ def figure3(numbers, style, outdir):
         else:
             colors.append(sem["provisional"])
     horizontal_bars(ax, labels, vals, colors, "Study/platform-associated callability", "Loci")
-    ax.text(
-        0.98, 0.03,
-        f"{n_int(numbers, 'platform_study_confounded_callability_loci')} loci carry the frozen confounded-callability label; descriptive, not causal.",
-        transform=ax.transAxes, ha="right", va="bottom",
-        fontsize=6.8, color=style["canvas"]["muted_text"]
-    )
     panel_label(ax, "B", style)
 
     ax = axes[1, 0]
@@ -346,15 +340,17 @@ def figure3(numbers, style, outdir):
     known = Counter(r["g7_locus_class"] for r in universe if r["known_pv"] == "YES")
     classes = ["PRIMARY_TECHNICAL", "PROVISIONAL_TECHNICAL", "PRIMARY_INELIGIBLE"]
     vals = [known[c] for c in classes]
-    labels = ["PRIMARY", "PROVISIONAL", "INELIGIBLE"]
-    bars = ax.bar(labels, vals, color=[sem["primary"], sem["provisional"], sem["known_pv"]], width=0.62)
-    annotate_vertical(ax, bars, vals)
-    ax.set_title("Literature-anchored KNOWN_PV representation", pad=6)
-    ax.set_ylabel("Known-PV loci")
-    ax.set_ylim(0, max(vals + [1]) * 1.2)
-    clean_ax(ax, "y")
+    horizontal_bars(
+        ax,
+        ["PRIMARY", "PROVISIONAL", "INELIGIBLE"],
+        vals,
+        [sem["primary"], sem["provisional"], sem["known_pv"]],
+        "Literature-anchored KNOWN_PV",
+        "Known-PV loci",
+        xmax=max(max(vals + [1]) * 1.25, 10),
+    )
     ax.text(
-        0.98, 0.05, "No KNOWN_PV locus is in PRIMARY_TECHNICAL.",
+        0.98, 0.05, "PRIMARY contains 0 KNOWN_PV loci.",
         transform=ax.transAxes, ha="right", va="bottom",
         fontsize=7.2, color=style["canvas"]["muted_text"]
     )
@@ -401,9 +397,9 @@ def figure4(numbers, style, outdir):
     ax.set_ylim(0, 46)
     clean_ax(ax, "y")
     ax.text(
-        0.98, 0.93,
+        0.98, 0.04,
         f"{n_int(numbers, 'confounding_correa_studies')} studies; {n_int(numbers, 'confounding_correa_biosamples')} Correa-labelled BioSamples",
-        transform=ax.transAxes, ha="right", va="top",
+        transform=ax.transAxes, ha="right", va="bottom",
         fontsize=7.2, color=style["canvas"]["muted_text"]
     )
     panel_label(ax, "A", style)
@@ -445,13 +441,7 @@ def figure4(numbers, style, outdir):
         ax.text(v + 0.10, i, str(v), va="center", ha="left", fontsize=8)
     if provisional_vals[1]:
         ax.text(primary_vals[1] + provisional_vals[1] + 0.10, 1, str(provisional_vals[1]), va="center", ha="left", fontsize=8)
-    ax.legend(frameon=False, fontsize=6.8, loc="lower right")
-    ax.text(
-        0.98, 0.04,
-        "Denominators: PRIMARY 261; PROVISIONAL 39.",
-        transform=ax.transAxes, ha="right", va="bottom",
-        fontsize=7.0, color=style["canvas"]["muted_text"]
-    )
+    ax.legend(frameon=False, fontsize=6.8, loc="upper right")
     panel_label(ax, "C", style)
 
     ax = axes[1, 1]
