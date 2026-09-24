@@ -34,6 +34,11 @@ def main():
         if got != want:
             failures.append(f"{metric}: manuscript={got!r}, computed={want!r}")
 
+    panel = read_tsv("metadata/loci/reference_panel.tsv")
+    expect("reference_panel_genomes", len(panel))
+    if len({r["short_code"] for r in panel}) != len(panel):
+        failures.append("reference panel contains duplicate short_code values")
+
     catalogue = read_tsv("metadata/loci/repeat_catalogue.tsv")
     by_locus = defaultdict(list)
     for row in catalogue:
@@ -81,6 +86,9 @@ def main():
     sj = json.loads((ROOT / "results/validation/synthetic_overall.json").read_text())
     expect("synthetic_uncallable_rate", sj["all"]["uncallable_rate"])
 
+    expect("synthetic_callable_fraction", int(synthetic["callable"]["numerator"]) / int(synthetic["callable"]["denominator"]))
+    expect("synthetic_confident_fraction", int(synthetic["confident"]["numerator"]) / int(synthetic["confident"]["denominator"]))
+
     hifi_j = json.loads((ROOT / "results/validation/hifi_overall.json").read_text())
     truth = hifi_j["truth_status_counts"]
     expect("hifi_truth_high_confidence", truth["HIGH_CONFIDENCE_HIFI_TRUTH"])
@@ -88,16 +96,22 @@ def main():
     expect("hifi_truth_uncallable", truth["UNCALLABLE_HIFI"])
     expect("hifi_truth_total", sum(truth.values()))
 
+    hifi_manifest = read_tsv("metadata/validation/hifi_manifest.tsv")
+    expect("hifi_validation_isolates", len({r["isolate"] for r in hifi_manifest if r["read_type"] == "LONG_HIFI"}))
+
     hifi = read_tsv("results/validation/hifi_short_vs_hifi.tsv")
     compared = [r for r in hifi
                 if r["comparison_universe"] == "YES"
                 and r["hifi_truth_status"] == "HIGH_CONFIDENCE_HIFI_TRUTH"]
     expect("hifi_high_confidence_comparisons", len(compared))
     expect("hifi_exact", sum(r["outcome"] == "EXACT_CONCORDANT" for r in compared))
+    exact_n = sum(r["outcome"] == "EXACT_CONCORDANT" for r in compared)
+    expect("hifi_exact_fraction", exact_n / len(compared))
     nr = {r["stratum"]: r for r in read_tsv("results/validation/hifi_nonreference_summary.tsv")}
     nr_all = nr["ALL_HIGH_CONFIDENCE (not a validation of any single class)"]
     expect("hifi_nonreference_comparisons", int(nr_all["nonreference_comparisons"]))
     expect("hifi_nonreference_exact", int(nr_all["nonreference_exact"]))
+    expect("hifi_nonreference_exact_fraction", int(nr_all["nonreference_exact"]) / int(nr_all["nonreference_comparisons"]))
 
     callability = {r["metric"]: r for r in read_tsv("results/callability/summary.tsv")}
     expect("phase1_callable_union_loci", callability["phase1_callable_union_loci"]["value"])
@@ -124,10 +138,14 @@ def main():
     expect("prjna360417_primary_screen_pass", int(c360["n_primary_passed_screen"]))
     expect("prjna360417_strict_computable", c360["strict_computable"].upper())
     expect("prjna360417_diagnostic_exact_p", float(c360["diagnostic_exact_p"]))
+    expect("prjna360417_min_pairwise_coverage", int(c360["min_pairwise_coverage"]))
+    expect("prjna360417_max_pairwise_coverage", int(c360["max_pairwise_coverage"]))
     expect("prjna678459_primary_screen_pass", int(c678["n_primary_passed_screen"]))
     expect("prjna678459_provisional_screen_pass", int(c678["n_provisional_passed_screen"]))
     expect("prjna678459_strict_computable", c678["strict_computable"].upper())
     expect("prjna678459_diagnostic_exact_p", float(c678["diagnostic_exact_p"]))
+    expect("prjna678459_min_pairwise_coverage", int(c678["min_pairwise_coverage"]))
+    expect("prjna678459_max_pairwise_coverage", int(c678["max_pairwise_coverage"]))
     expect("prjna1103397_primary_screen_pass", int(c110["n_primary_passed_screen"]))
 
     structure = {r["cohort"]: r for r in read_tsv("results/pilot_disease/structure_overlay_summary.tsv")}
