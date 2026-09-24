@@ -1,0 +1,2 @@
+artifact	publication_status	authoritative_archive_repo	authoritative_archive_path	blob_sha	size_bytes	expected_callable_union_loci	reconstruction_script	raw_data_manifest	notes
+phase1_calls.tsv	OMITTED_LARGE_REGENERABLE	kgurgen97/hp-phase-variation-development-archive	results/g5/g5_phase1_calls.tsv	58486570113e1cde6d0668db1b8d2a6fe38b1915	17870238	909	analysis/frozen_source/g5/g5_run_samples.py	metadata/cohorts/phase1_download_manifest.tsv	Exact archive blob identity retained; no zero-byte placeholder. Manuscript-facing derived summaries are tracked.
