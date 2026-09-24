@@ -276,7 +276,7 @@ def figure2(numbers, style, outdir):
     ax.set_xlabel("Comparisons")
     ax.set_title("Non-reference validation coverage", pad=6)
     clean_ax(ax, "x")
-    ax.legend(frameon=False, fontsize=6.8, loc="upper right")
+    ax.legend(frameon=False, fontsize=6.8, loc="lower right")
     for yi, total in enumerate(totals):
         if total == 0:
             ax.text(0.8, yi, "0", va="center", ha="left", fontsize=7.2,
@@ -349,11 +349,6 @@ def figure3(numbers, style, outdir):
         "Known-PV loci",
         xmax=max(max(vals + [1]) * 1.25, 10),
     )
-    ax.text(
-        0.98, 0.05, "PRIMARY contains 0 KNOWN_PV loci.",
-        transform=ax.transAxes, ha="right", va="bottom",
-        fontsize=7.2, color=style["canvas"]["muted_text"]
-    )
     panel_label(ax, "C", style)
 
     ax = axes[1, 1]
@@ -396,12 +391,6 @@ def figure4(numbers, style, outdir):
     ax.set_ylabel("Studies")
     ax.set_ylim(0, 46)
     clean_ax(ax, "y")
-    ax.text(
-        0.98, 0.04,
-        f"{n_int(numbers, 'confounding_correa_studies')} studies; {n_int(numbers, 'confounding_correa_biosamples')} Correa-labelled BioSamples",
-        transform=ax.transAxes, ha="right", va="bottom",
-        fontsize=7.2, color=style["canvas"]["muted_text"]
-    )
     panel_label(ax, "A", style)
 
     ax = axes[0, 1]
@@ -441,7 +430,7 @@ def figure4(numbers, style, outdir):
         ax.text(v + 0.10, i, str(v), va="center", ha="left", fontsize=8)
     if provisional_vals[1]:
         ax.text(primary_vals[1] + provisional_vals[1] + 0.10, 1, str(provisional_vals[1]), va="center", ha="left", fontsize=8)
-    ax.legend(frameon=False, fontsize=6.8, loc="upper right")
+    ax.legend(frameon=False, fontsize=6.8, loc="lower right")
     panel_label(ax, "C", style)
 
     ax = axes[1, 1]
