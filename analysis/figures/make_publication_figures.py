@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import textwrap
 from collections import Counter
 from pathlib import Path
 
@@ -25,8 +26,7 @@ def read_tsv(path: Path):
 
 
 def load_numbers():
-    rows = read_tsv(NUMBERS_PATH)
-    return {r["metric"]: r for r in rows}
+    return {r["metric"]: r for r in read_tsv(NUMBERS_PATH)}
 
 
 def n_int(numbers, key):
@@ -37,7 +37,7 @@ def n_float(numbers, key):
     return float(numbers[key]["value"])
 
 
-def pct(num, den, digits=1):
+def pct(num, den):
     return 100.0 * num / den if den else float("nan")
 
 
@@ -74,13 +74,13 @@ def clean_ax(ax, grid_axis=None):
 
 def panel_label(ax, label, style):
     ax.text(
-        -0.12, 1.08, label, transform=ax.transAxes,
+        -0.10, 1.05, label, transform=ax.transAxes,
         fontsize=style["typography"]["panel_label_size"],
         fontweight="bold", va="top", ha="left"
     )
 
 
-def annotate_bar_values(ax, bars, values, fmt="{:,.0f}", pad=3):
+def annotate_vertical(ax, bars, values, fmt="{:,.0f}", pad=3):
     for bar, value in zip(bars, values):
         ax.annotate(
             fmt.format(value),
@@ -88,6 +88,28 @@ def annotate_bar_values(ax, bars, values, fmt="{:,.0f}", pad=3):
             xytext=(0, pad), textcoords="offset points",
             ha="center", va="bottom", fontsize=8
         )
+
+
+def horizontal_bars(ax, labels, values, colors, title, xlabel, value_fmt="{:,.0f}", xmax=None):
+    y = list(range(len(labels)))
+    bars = ax.barh(y, values, color=colors, height=0.62)
+    ax.set_yticks(y, labels)
+    ax.invert_yaxis()
+    ax.set_title(title, pad=6)
+    ax.set_xlabel(xlabel)
+    clean_ax(ax, "x")
+    max_v = max(values) if values else 1
+    if xmax is None:
+        xmax = max_v * 1.22 if max_v > 0 else 1
+    ax.set_xlim(0, xmax)
+    for bar, value in zip(bars, values):
+        ax.annotate(
+            value_fmt.format(value),
+            (bar.get_width(), bar.get_y() + bar.get_height() / 2),
+            xytext=(4, 0), textcoords="offset points",
+            ha="left", va="center", fontsize=8
+        )
+    return bars
 
 
 def save_all(fig, outdir, stem, style):
@@ -100,88 +122,84 @@ def save_all(fig, outdir, stem, style):
 
 def figure1(numbers, style, outdir):
     sem = style["semantic"]
-    fig, axes = plt.subplots(2, 2, figsize=(7.2, 5.4))
-    fig.subplots_adjust(wspace=0.36, hspace=0.52)
+    fig, axes = plt.subplots(2, 2, figsize=(7.4, 5.7), layout="constrained")
 
     ax = axes[0, 0]
-    vals = [
-        n_int(numbers, "catalogue_loci"),
-        n_int(numbers, "catalogue_members"),
-        n_int(numbers, "caller_eligible_loci"),
-    ]
-    labels = ["Repeat loci", "Catalogue members", "Caller-eligible loci"]
-    colors = [sem["primary"], sem["neutral"], sem["eligible"]]
-    bars = ax.bar(labels, vals, color=colors, width=0.62)
-    annotate_bar_values(ax, bars, vals)
-    ax.set_title("Catalogue scale")
-    ax.set_ylabel("Count")
-    ax.tick_params(axis="x", rotation=20)
-    clean_ax(ax, "y")
+    horizontal_bars(
+        ax,
+        ["Repeat loci", "Catalogue members", "Caller-eligible loci"],
+        [
+            n_int(numbers, "catalogue_loci"),
+            n_int(numbers, "catalogue_members"),
+            n_int(numbers, "caller_eligible_loci"),
+        ],
+        [sem["primary"], sem["neutral"], sem["eligible"]],
+        "Catalogue scale",
+        "Count",
+    )
     panel_label(ax, "A", style)
 
     ax = axes[0, 1]
-    audit_labels = ["Boundary\nstable", "Boundary\nambiguous", "Orthology\nambiguous", "Insufficient\nto resolve"]
-    audit_vals = [
-        n_int(numbers, "boundary_stable_loci"),
-        n_int(numbers, "boundary_ambiguous_loci"),
-        n_int(numbers, "orthology_ambiguous_loci"),
-        n_int(numbers, "insufficient_to_resolve_loci"),
-    ]
-    audit_colors = [sem["eligible"], sem["caution"], sem["failure"], sem["neutral"]]
-    bars = ax.bar(audit_labels, audit_vals, color=audit_colors, width=0.68)
-    annotate_bar_values(ax, bars, audit_vals)
-    ax.set_title("Boundary / orthology audit")
-    ax.set_ylabel("Loci")
-    clean_ax(ax, "y")
+    horizontal_bars(
+        ax,
+        ["Boundary stable", "Boundary ambiguous", "Orthology ambiguous", "Insufficient to resolve"],
+        [
+            n_int(numbers, "boundary_stable_loci"),
+            n_int(numbers, "boundary_ambiguous_loci"),
+            n_int(numbers, "orthology_ambiguous_loci"),
+            n_int(numbers, "insufficient_to_resolve_loci"),
+        ],
+        [sem["eligible"], sem["caution"], sem["failure"], sem["neutral"]],
+        "Boundary / orthology audit",
+        "Loci",
+    )
     panel_label(ax, "B", style)
 
     ax = axes[1, 0]
-    universe_labels = ["PRIMARY", "PROVISIONAL", "INELIGIBLE"]
-    universe_vals = [
-        n_int(numbers, "primary_technical_loci"),
-        n_int(numbers, "provisional_technical_loci"),
-        n_int(numbers, "primary_ineligible_loci"),
-    ]
-    universe_colors = [sem["primary"], sem["provisional"], sem["ineligible"]]
-    bars = ax.bar(universe_labels, universe_vals, color=universe_colors, width=0.65)
-    annotate_bar_values(ax, bars, universe_vals)
-    ax.set_title("Frozen technical universe")
-    ax.set_ylabel("Loci")
-    clean_ax(ax, "y")
+    horizontal_bars(
+        ax,
+        ["PRIMARY", "PROVISIONAL", "INELIGIBLE"],
+        [
+            n_int(numbers, "primary_technical_loci"),
+            n_int(numbers, "provisional_technical_loci"),
+            n_int(numbers, "primary_ineligible_loci"),
+        ],
+        [sem["primary"], sem["provisional"], sem["ineligible"]],
+        "Frozen technical universe",
+        "Loci",
+    )
     panel_label(ax, "C", style)
 
     ax = axes[1, 1]
-    evidence_labels = ["Repeat-only", "Strong PV\ncandidate", "Mixed", "Known PV\nin PRIMARY"]
-    evidence_vals = [
-        n_int(numbers, "primary_repeat_only_loci"),
-        n_int(numbers, "primary_strong_pv_candidate_loci"),
-        n_int(numbers, "primary_mixed_evidence_loci"),
-        n_int(numbers, "primary_known_pv_loci"),
-    ]
-    evidence_colors = [
-        sem["repeat_only"], sem["strong_pv_candidate"],
-        sem["mixed_evidence"], sem["known_pv"]
-    ]
-    bars = ax.bar(evidence_labels, evidence_vals, color=evidence_colors, width=0.68)
-    annotate_bar_values(ax, bars, evidence_vals)
-    ax.set_title("Evidence within PRIMARY_TECHNICAL")
-    ax.set_ylabel("Loci")
-    clean_ax(ax, "y")
-    panel_label(ax, "D", style)
-    ax.text(
-        0.01, -0.32,
-        "Technical eligibility and phase-variation evidence are distinct annotations.",
-        transform=ax.transAxes, fontsize=7.5, color=style["canvas"]["muted_text"]
+    horizontal_bars(
+        ax,
+        ["Repeat-only", "Strong PV candidate", "Mixed evidence", "Known PV in PRIMARY"],
+        [
+            n_int(numbers, "primary_repeat_only_loci"),
+            n_int(numbers, "primary_strong_pv_candidate_loci"),
+            n_int(numbers, "primary_mixed_evidence_loci"),
+            n_int(numbers, "primary_known_pv_loci"),
+        ],
+        [sem["repeat_only"], sem["strong_pv_candidate"], sem["mixed_evidence"], sem["known_pv"]],
+        "Evidence within PRIMARY_TECHNICAL",
+        "Loci",
+        xmax=285,
     )
+    ax.text(
+        0.98, 0.03,
+        "Technical eligibility ≠ phase-variation evidence.",
+        transform=ax.transAxes, ha="right", va="bottom",
+        fontsize=7.2, color=style["canvas"]["muted_text"]
+    )
+    panel_label(ax, "D", style)
 
-    fig.suptitle("Figure 1. Repeat-locus catalogue and frozen technical analysis universe", y=1.01, fontsize=12)
+    fig.suptitle("Figure 1. Repeat-locus catalogue and frozen technical analysis universe", fontsize=12)
     save_all(fig, outdir, "fig1_catalogue_universe", style)
 
 
 def figure2(numbers, style, outdir):
     sem = style["semantic"]
-    fig, axes = plt.subplots(2, 2, figsize=(7.2, 5.5))
-    fig.subplots_adjust(wspace=0.37, hspace=0.58)
+    fig, axes = plt.subplots(2, 2, figsize=(7.4, 5.9), layout="constrained")
 
     ax = axes[0, 0]
     empirical_total = n_int(numbers, "synthetic_empirical_total")
@@ -189,20 +207,21 @@ def figure2(numbers, style, outdir):
     exact_n = n_int(numbers, "synthetic_exact_dominant")
     confident_n = n_int(numbers, "synthetic_confident")
     false_n = n_int(numbers, "synthetic_false_confident_wrong")
-    vals = [
+    rate_labels = ["Callable", "Exact among callable", "Confident among callable", "Wrong among confident"]
+    rate_vals = [
         pct(callable_n, empirical_total),
         pct(exact_n, callable_n),
         pct(confident_n, callable_n),
         pct(false_n, confident_n),
     ]
-    labels = ["Callable\n1780/2720", "Exact | callable\n1757/1780", "Confident | callable\n1595/1780", "Wrong | confident\n15/1595"]
-    colors = [sem["eligible"], sem["primary"], sem["provisional"], sem["failure"]]
-    bars = ax.bar(labels, vals, color=colors, width=0.68)
-    annotate_bar_values(ax, bars, vals, fmt="{:.1f}%")
-    ax.set_ylim(0, 105)
-    ax.set_ylabel("Percent")
-    ax.set_title("Synthetic empirical benchmark")
-    clean_ax(ax, "y")
+    horizontal_bars(
+        ax, rate_labels, rate_vals,
+        [sem["eligible"], sem["primary"], sem["provisional"], sem["failure"]],
+        "Synthetic empirical benchmark", "Percent", value_fmt="{:.1f}%", xmax=108
+    )
+    denoms = ["1780/2720", "1757/1780", "1595/1780", "15/1595"]
+    for i, d in enumerate(denoms):
+        ax.text(1.5, i, d, va="center", ha="left", fontsize=6.8, color=style["canvas"]["muted_text"])
     panel_label(ax, "A", style)
 
     ax = axes[0, 1]
@@ -212,18 +231,17 @@ def figure2(numbers, style, outdir):
         n_int(numbers, "hifi_truth_ambiguous"),
         n_int(numbers, "hifi_truth_uncallable"),
     ]
-    truth_colors = [sem["eligible"], sem["caution"], sem["ineligible"]]
-    bars = ax.bar(truth_labels, truth_vals, color=truth_colors, width=0.68)
-    annotate_bar_values(ax, bars, truth_vals)
-    ax.set_title("HiFi truth availability")
-    ax.set_ylabel("Isolate-locus pairs")
-    clean_ax(ax, "y")
-    panel_label(ax, "B", style)
-    ax.text(
-        0.99, 0.98, f"Total = {n_int(numbers, 'hifi_truth_total'):,}",
-        transform=ax.transAxes, ha="right", va="top", fontsize=8,
-        color=style["canvas"]["muted_text"]
+    horizontal_bars(
+        ax, truth_labels, truth_vals,
+        [sem["eligible"], sem["caution"], sem["ineligible"]],
+        "HiFi truth availability", "Isolate-locus pairs"
     )
+    ax.text(
+        0.98, 0.05, f"Total = {n_int(numbers, 'hifi_truth_total'):,}",
+        transform=ax.transAxes, ha="right", va="bottom",
+        fontsize=7.5, color=style["canvas"]["muted_text"]
+    )
+    panel_label(ax, "B", style)
 
     ax = axes[1, 0]
     overall_n = n_int(numbers, "hifi_high_confidence_comparisons")
@@ -231,13 +249,15 @@ def figure2(numbers, style, outdir):
     nr_n = n_int(numbers, "hifi_nonreference_comparisons")
     nr_exact = n_int(numbers, "hifi_nonreference_exact")
     vals = [pct(overall_exact, overall_n), pct(nr_exact, nr_n)]
-    labels = [f"All high-confidence\n{overall_exact}/{overall_n}", f"Non-reference\n{nr_exact}/{nr_n}"]
+    labels = ["All high-confidence", "Non-reference"]
     bars = ax.bar(labels, vals, color=[sem["primary"], sem["provisional"]], width=0.58)
-    annotate_bar_values(ax, bars, vals, fmt="{:.1f}%")
-    ax.set_ylim(0, 102)
+    annotate_vertical(ax, bars, vals, fmt="{:.1f}%")
+    ax.set_ylim(0, 104)
     ax.set_ylabel("Exact concordance (%)")
-    ax.set_title("Short-read versus HiFi")
+    ax.set_title("Short-read versus HiFi", pad=6)
     clean_ax(ax, "y")
+    ax.text(0, 2, f"{overall_exact}/{overall_n}", ha="center", va="bottom", fontsize=7, color=style["canvas"]["muted_text"])
+    ax.text(1, 2, f"{nr_exact}/{nr_n}", ha="center", va="bottom", fontsize=7, color=style["canvas"]["muted_text"])
     panel_label(ax, "C", style)
 
     ax = axes[1, 1]
@@ -247,64 +267,79 @@ def figure2(numbers, style, outdir):
     totals = [int(r["nonreference_comparisons"]) for r in rows]
     exact = [int(r["nonreference_exact"]) for r in rows]
     y = list(range(len(strata)))
-    ax.barh(y, totals, color=sem["ineligible"], label="Observed non-reference truth")
-    ax.barh(y, exact, color=sem["primary"], label="Exact")
+    ax.barh(y, totals, color=sem["ineligible"], height=0.62, label="Observed non-reference truth")
+    ax.barh(y, exact, color=sem["primary"], height=0.62, label="Exact")
     ax.set_yticks(y, strata)
     ax.invert_yaxis()
     ax.set_xlabel("Comparisons")
-    ax.set_title("Non-reference validation coverage")
+    ax.set_title("Non-reference validation coverage", pad=6)
     clean_ax(ax, "x")
-    panel_label(ax, "D", style)
-    ax.legend(frameon=False, fontsize=7, loc="lower right")
+    ax.legend(frameon=False, fontsize=6.8, loc="lower right")
     ax.text(
-        0.0, -0.25,
-        "Zero bars denote no observed non-reference truth; they do not validate that stratum.",
-        transform=ax.transAxes, fontsize=7.3, color=style["canvas"]["muted_text"]
+        0.98, 0.04,
+        "Zero = no observed non-reference truth; not validation.",
+        transform=ax.transAxes, ha="right", va="bottom",
+        fontsize=6.7, color=style["canvas"]["muted_text"]
     )
+    panel_label(ax, "D", style)
 
-    fig.suptitle("Figure 2. Technical validation of repeat-length calling", y=1.01, fontsize=12)
+    fig.suptitle("Figure 2. Technical validation of repeat-length calling", fontsize=12)
     save_all(fig, outdir, "fig2_technical_validation", style)
 
 
 def figure3(numbers, style, outdir):
     sem = style["semantic"]
-    fig, axes = plt.subplots(2, 2, figsize=(7.2, 5.6))
-    fig.subplots_adjust(wspace=0.38, hspace=0.58)
+    fig, axes = plt.subplots(2, 2, figsize=(7.5, 5.9), layout="constrained")
 
     ax = axes[0, 0]
-    labels = ["Stable", "Boundary\nambiguous", "Orthology\nambiguous", "Insufficient\nto resolve"]
-    vals = [
-        n_int(numbers, "boundary_stable_loci"),
-        n_int(numbers, "boundary_ambiguous_loci"),
-        n_int(numbers, "orthology_ambiguous_loci"),
-        n_int(numbers, "insufficient_to_resolve_loci"),
-    ]
-    bars = ax.bar(labels, vals, color=[sem["eligible"], sem["caution"], sem["failure"], sem["neutral"]], width=0.68)
-    annotate_bar_values(ax, bars, vals)
-    ax.set_title("Catalogue-resolution failure modes")
-    ax.set_ylabel("Loci")
-    clean_ax(ax, "y")
+    horizontal_bars(
+        ax,
+        ["Stable", "Boundary ambiguous", "Orthology ambiguous", "Insufficient to resolve"],
+        [
+            n_int(numbers, "boundary_stable_loci"),
+            n_int(numbers, "boundary_ambiguous_loci"),
+            n_int(numbers, "orthology_ambiguous_loci"),
+            n_int(numbers, "insufficient_to_resolve_loci"),
+        ],
+        [sem["eligible"], sem["caution"], sem["failure"], sem["neutral"]],
+        "Catalogue-resolution states",
+        "Loci",
+    )
     panel_label(ax, "A", style)
 
     ax = axes[0, 1]
     platform = read_tsv(ROOT / "results/callability/platform_transfer.tsv")
     counts = Counter(r["callability_class"] for r in platform)
-    order = sorted(counts, key=lambda k: (-counts[k], k))
+    preferred = [
+        "CALLABLE_BOTH", "PARTIAL", "UNCALLABLE_BOTH",
+        "PLATFORM_CONFOUNDED_CALLABILITY", "NA"
+    ]
+    order = [k for k in preferred if k in counts] + [k for k in sorted(counts) if k not in preferred]
+    pretty = {
+        "CALLABLE_BOTH": "Callable both",
+        "PARTIAL": "Partial",
+        "UNCALLABLE_BOTH": "Uncallable both",
+        "PLATFORM_CONFOUNDED_CALLABILITY": "Platform/study-confounded",
+        "NA": "NA",
+    }
+    labels = [pretty.get(k, k.replace("_", " ").title()) for k in order]
     vals = [counts[k] for k in order]
-    labels = [k.replace("_", "\n") for k in order]
-    colors = [sem["caution"] if k == "PLATFORM_CONFOUNDED_CALLABILITY" else sem["provisional"] for k in order]
-    bars = ax.bar(labels, vals, color=colors, width=0.7)
-    annotate_bar_values(ax, bars, vals)
-    ax.set_title("Study/platform-associated callability")
-    ax.set_ylabel("Loci")
-    ax.tick_params(axis="x", labelsize=6.5)
-    clean_ax(ax, "y")
-    panel_label(ax, "B", style)
+    colors = []
+    for k in order:
+        if k == "PLATFORM_CONFOUNDED_CALLABILITY":
+            colors.append(sem["caution"])
+        elif k == "UNCALLABLE_BOTH":
+            colors.append(sem["neutral"])
+        else:
+            colors.append(sem["provisional"])
+    horizontal_bars(ax, labels, vals, colors, "Study/platform-associated callability", "Loci")
     ax.text(
-        0.0, -0.31,
-        f"{n_int(numbers, 'platform_study_confounded_callability_loci')} loci carry the frozen PLATFORM_CONFOUNDED_CALLABILITY label; descriptive, not causal.",
-        transform=ax.transAxes, fontsize=7.2, color=style["canvas"]["muted_text"]
+        0.98, 0.03,
+        f"{n_int(numbers, 'platform_study_confounded_callability_loci')} loci carry the frozen confounded-callability label; descriptive, not causal.",
+        transform=ax.transAxes, ha="right", va="bottom",
+        fontsize=6.8, color=style["canvas"]["muted_text"]
     )
+    panel_label(ax, "B", style)
 
     ax = axes[1, 0]
     universe = read_tsv(ROOT / "metadata/loci/analysis_universe.tsv")
@@ -312,44 +347,46 @@ def figure3(numbers, style, outdir):
     classes = ["PRIMARY_TECHNICAL", "PROVISIONAL_TECHNICAL", "PRIMARY_INELIGIBLE"]
     vals = [known[c] for c in classes]
     labels = ["PRIMARY", "PROVISIONAL", "INELIGIBLE"]
-    bars = ax.bar(labels, vals, color=[sem["primary"], sem["provisional"], sem["known_pv"]], width=0.65)
-    annotate_bar_values(ax, bars, vals)
-    ax.set_title("Literature-anchored KNOWN_PV representation")
+    bars = ax.bar(labels, vals, color=[sem["primary"], sem["provisional"], sem["known_pv"]], width=0.62)
+    annotate_vertical(ax, bars, vals)
+    ax.set_title("Literature-anchored KNOWN_PV representation", pad=6)
     ax.set_ylabel("Known-PV loci")
+    ax.set_ylim(0, max(vals + [1]) * 1.2)
     clean_ax(ax, "y")
-    panel_label(ax, "C", style)
     ax.text(
-        0.0, -0.27,
-        "No KNOWN_PV locus is in PRIMARY_TECHNICAL.",
-        transform=ax.transAxes, fontsize=7.5, color=style["canvas"]["muted_text"]
+        0.98, 0.05, "No KNOWN_PV locus is in PRIMARY_TECHNICAL.",
+        transform=ax.transAxes, ha="right", va="bottom",
+        fontsize=7.2, color=style["canvas"]["muted_text"]
     )
+    panel_label(ax, "C", style)
 
     ax = axes[1, 1]
     ax.axis("off")
+    ax.set_title("Reproducibility boundary", pad=6)
     panel_label(ax, "D", style)
-    ax.set_title("Reproducibility boundary")
-    lines = [
-        "Frozen generating source exported for G5-G8.",
-        "Exact historical environment: partially recorded.",
-        "Phase-1 call matrix: omitted large regenerable artifact;",
-        "  archive blob SHA/size and regeneration route retained.",
-        "G6 curated closure-table provenance: disclosed limitation.",
-        "No new thresholds, cohorts, endpoints, or disease reclassification."
+    blocks = [
+        ("Frozen generating source exported for G5-G8.", True),
+        ("Exact historical environment was only partially recorded.", False),
+        ("Phase-1 call matrix is an omitted large regenerable artifact; archive blob SHA/size and the regeneration route are retained.", False),
+        ("G6 curated closure-table provenance remains a disclosed limitation.", False),
+        ("No new thresholds, cohorts, endpoints, or disease reclassification.", True),
     ]
-    y = 0.86
-    for i, line in enumerate(lines):
-        weight = "bold" if i in (0, 5) else "normal"
-        ax.text(0.02, y, line, transform=ax.transAxes, va="top", fontsize=8.2, fontweight=weight)
-        y -= 0.13 if i != 2 else 0.10
+    y = 0.88
+    for text_value, bold in blocks:
+        wrapped = textwrap.fill(text_value, width=48)
+        ax.text(
+            0.02, y, wrapped, transform=ax.transAxes, va="top",
+            fontsize=8.0, fontweight="bold" if bold else "normal"
+        )
+        y -= 0.16 + 0.06 * (wrapped.count("\n"))
 
-    fig.suptitle("Figure 3. Technical failure modes and interpretation boundary", y=1.01, fontsize=12)
+    fig.suptitle("Figure 3. Technical failure modes and interpretation boundary", fontsize=12)
     save_all(fig, outdir, "fig3_failure_modes", style)
 
 
 def figure4(numbers, style, outdir):
     sem = style["semantic"]
-    fig, axes = plt.subplots(2, 2, figsize=(7.2, 5.7))
-    fig.subplots_adjust(wspace=0.38, hspace=0.60)
+    fig, axes = plt.subplots(2, 2, figsize=(7.5, 6.1), layout="constrained")
 
     ax = axes[0, 0]
     vals = [
@@ -358,19 +395,21 @@ def figure4(numbers, style, outdir):
     ]
     labels = ["Single-country", "Multicountry"]
     bars = ax.bar(labels, vals, color=[sem["neutral"], sem["caution"]], width=0.58)
-    annotate_bar_values(ax, bars, vals)
-    ax.set_title("Public-cohort geography structure")
+    annotate_vertical(ax, bars, vals)
+    ax.set_title("Public-cohort geography structure", pad=6)
     ax.set_ylabel("Studies")
+    ax.set_ylim(0, 46)
     clean_ax(ax, "y")
-    panel_label(ax, "A", style)
     ax.text(
-        0.02, 0.96,
+        0.98, 0.93,
         f"{n_int(numbers, 'confounding_correa_studies')} studies; {n_int(numbers, 'confounding_correa_biosamples')} Correa-labelled BioSamples",
-        transform=ax.transAxes, va="top", fontsize=7.8, color=style["canvas"]["muted_text"]
+        transform=ax.transAxes, ha="right", va="top",
+        fontsize=7.2, color=style["canvas"]["muted_text"]
     )
+    panel_label(ax, "A", style)
 
     ax = axes[0, 1]
-    cohort_labels = ["PRJNA360417\nNAG", "PRJNA360417\nIM", "PRJNA678459\nAG", "PRJNA678459\nGC", "PRJNA1103397\nGC"]
+    cohort_labels = ["360417 NAG", "360417 IM", "678459 AG", "678459 GC", "1103397 GC"]
     cohort_vals = [
         n_int(numbers, "prjna360417_nag"),
         n_int(numbers, "prjna360417_im"),
@@ -378,12 +417,11 @@ def figure4(numbers, style, outdir):
         n_int(numbers, "prjna678459_gc"),
         n_int(numbers, "prjna1103397_gc"),
     ]
-    bars = ax.bar(cohort_labels, cohort_vals, color=[sem["provisional"], sem["primary"], sem["provisional"], sem["primary"], sem["neutral"]], width=0.68)
-    annotate_bar_values(ax, bars, cohort_vals)
-    ax.set_title("Pilot cohort sample sizes")
-    ax.set_ylabel("Patients / selected isolates")
-    ax.tick_params(axis="x", labelsize=6.7)
-    clean_ax(ax, "y")
+    horizontal_bars(
+        ax, cohort_labels, cohort_vals,
+        [sem["provisional"], sem["primary"], sem["provisional"], sem["primary"], sem["neutral"]],
+        "Pilot cohort sample sizes", "Patients / selected isolates", xmax=7
+    )
     panel_label(ax, "B", style)
 
     ax = axes[1, 0]
@@ -394,51 +432,58 @@ def figure4(numbers, style, outdir):
         n_int(numbers, "prjna1103397_primary_screen_pass"),
     ]
     provisional_vals = [0, n_int(numbers, "prjna678459_provisional_screen_pass"), 0]
-    x = list(range(len(labels)))
-    b1 = ax.bar(x, primary_vals, color=sem["primary"], width=0.58, label="PRIMARY passed screen")
-    b2 = ax.bar(x, provisional_vals, bottom=primary_vals, color=sem["provisional"], width=0.58, label="PROVISIONAL passed screen")
-    annotate_bar_values(ax, b1, primary_vals)
-    for bar, base, value in zip(b2, primary_vals, provisional_vals):
-        if value:
-            ax.annotate(
-                str(value), (bar.get_x() + bar.get_width()/2, base + value),
-                xytext=(0, 3), textcoords="offset points", ha="center", va="bottom", fontsize=8
-            )
-    ax.set_xticks(x, labels)
-    ax.set_title("Locus-screen attrition")
-    ax.set_ylabel("Loci passing frozen screen")
-    clean_ax(ax, "y")
-    panel_label(ax, "C", style)
-    ax.legend(frameon=False, fontsize=7)
+    y = list(range(len(labels)))
+    ax.barh(y, primary_vals, color=sem["primary"], height=0.62, label="PRIMARY passed screen")
+    ax.barh(y, provisional_vals, left=primary_vals, color=sem["provisional"], height=0.62, label="PROVISIONAL passed screen")
+    ax.set_yticks(y, labels)
+    ax.invert_yaxis()
+    ax.set_xlim(0, 8)
+    ax.set_xlabel("Loci passing frozen screen")
+    ax.set_title("Locus-screen attrition", pad=6)
+    clean_ax(ax, "x")
+    for i, v in enumerate(primary_vals):
+        ax.text(v + 0.10, i, str(v), va="center", ha="left", fontsize=8)
+    if provisional_vals[1]:
+        ax.text(primary_vals[1] + provisional_vals[1] + 0.10, 1, str(provisional_vals[1]), va="center", ha="left", fontsize=8)
+    ax.legend(frameon=False, fontsize=6.8, loc="lower right")
     ax.text(
-        0.0, -0.27, "PRIMARY denominator = 261 loci; PROVISIONAL denominator = 39 loci.",
-        transform=ax.transAxes, fontsize=7.3, color=style["canvas"]["muted_text"]
+        0.98, 0.04,
+        "Denominators: PRIMARY 261; PROVISIONAL 39.",
+        transform=ax.transAxes, ha="right", va="bottom",
+        fontsize=7.0, color=style["canvas"]["muted_text"]
     )
+    panel_label(ax, "C", style)
 
     ax = axes[1, 1]
     ax.axis("off")
+    ax.set_title("Strict endpoint status", pad=6)
     panel_label(ax, "D", style)
-    ax.set_title("Strict endpoint status")
-    lines = [
-        ("PRJNA360417 NAG vs IM", "NOT_COMPUTABLE", n_float(numbers, "prjna360417_diagnostic_exact_p")),
-        ("PRJNA678459 AG vs GC", "NOT_COMPUTABLE", n_float(numbers, "prjna678459_diagnostic_exact_p")),
-    ]
-    y = 0.83
-    for cohort, status, pval in lines:
-        ax.text(0.02, y, cohort, transform=ax.transAxes, fontsize=8.5, fontweight="bold", va="top")
-        ax.text(0.02, y-0.11, f"Strict: {status}", transform=ax.transAxes, fontsize=8.2, color=sem["failure"], va="top")
-        ax.text(0.02, y-0.21, f"Below-floor diagnostic exact p = {pval:.6f}", transform=ax.transAxes, fontsize=7.8, color=style["canvas"]["muted_text"], va="top")
-        y -= 0.38
+
+    ax.text(0.02, 0.88, "PRJNA360417 NAG vs IM", transform=ax.transAxes, fontsize=8.4, fontweight="bold", va="top")
+    ax.text(0.02, 0.76, "Strict: NOT_COMPUTABLE", transform=ax.transAxes, fontsize=8.2, color=sem["failure"], va="top")
     ax.text(
-        0.02, 0.06,
-        "Pre-specified floor: >=10 jointly callable loci/sample-pair.\n"
-        "PRJNA678459 structure: screening caution only "
-        f"(R²={n_float(numbers, 'structure_prjna678459_r2'):.4f}, p={n_float(numbers, 'structure_prjna678459_exact_p'):.6f}).\n"
-        f"PRJNA360417 structure: {numbers['structure_prjna360417']['value']}.",
-        transform=ax.transAxes, fontsize=7.2, color=style["canvas"]["muted_text"], va="bottom"
+        0.02, 0.66,
+        f"Below-floor diagnostic exact p = {n_float(numbers, 'prjna360417_diagnostic_exact_p'):.6f}",
+        transform=ax.transAxes, fontsize=7.5, color=style["canvas"]["muted_text"], va="top"
     )
 
-    fig.suptitle("Figure 4. Public-cohort stress test under frozen rules", y=1.01, fontsize=12)
+    ax.text(0.02, 0.49, "PRJNA678459 AG vs GC", transform=ax.transAxes, fontsize=8.4, fontweight="bold", va="top")
+    ax.text(0.02, 0.37, "Strict: NOT_COMPUTABLE", transform=ax.transAxes, fontsize=8.2, color=sem["failure"], va="top")
+    ax.text(
+        0.02, 0.27,
+        f"Below-floor diagnostic exact p = {n_float(numbers, 'prjna678459_diagnostic_exact_p'):.6f}",
+        transform=ax.transAxes, fontsize=7.5, color=style["canvas"]["muted_text"], va="top"
+    )
+
+    footer = (
+        "Coverage floor: >=10 jointly callable loci/sample-pair.\n"
+        f"PRJNA678459 structure screen: R²={n_float(numbers, 'structure_prjna678459_r2'):.4f}, "
+        f"p={n_float(numbers, 'structure_prjna678459_exact_p'):.6f} — confounding caution only.\n"
+        f"PRJNA360417 structure: {numbers['structure_prjna360417']['value']}."
+    )
+    ax.text(0.02, 0.04, footer, transform=ax.transAxes, fontsize=6.8, color=style["canvas"]["muted_text"], va="bottom")
+
+    fig.suptitle("Figure 4. Public-cohort stress test under frozen rules", fontsize=12)
     save_all(fig, outdir, "fig4_public_cohort_stress_test", style)
 
 
