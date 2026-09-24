@@ -5,7 +5,7 @@ from collections import defaultdict
 
 import matplotlib.pyplot as plt
 
-from io import manuscript_numbers, n_float, n_int, read_tsv, write_tsv
+from figure_io import manuscript_numbers, n_float, n_int, read_tsv, write_tsv
 from style import P, apply_style, clean_axis, panel_label, save_figure, source_path
 
 apply_style()
