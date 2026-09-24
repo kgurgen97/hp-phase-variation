@@ -14,3 +14,19 @@ results/g7/g7_confounding_matrix.tsv	results/confounding/confounding_matrix.tsv	
 results/g8/g8_locus_screen.tsv	results/pilot_disease/locus_screen.tsv	normalized publication path
 results/g8/g8_cohort_level_summary.tsv	results/pilot_disease/cohort_level_summary.tsv	normalized publication path
 results/g8/g8_structure_overlay_summary.tsv	results/pilot_disease/structure_overlay_summary.tsv	normalized publication path
+scripts/g7/g7_build_population_structure_manifest.py	analysis/frozen_source/g7/g7_build_population_structure_manifest.py	exact frozen source export
+scripts/g7/g7_kmer_sketch_distance.py	analysis/frozen_source/g7/g7_kmer_sketch_distance.py	exact frozen source export; SCREENING_STRUCTURE_ONLY
+scripts/g7/g7_structure_pcoa.py	analysis/frozen_source/g7/g7_structure_pcoa.py	exact frozen source export
+scripts/g7_followup/g7f_build_qc_manifest.py	analysis/frozen_source/g7_followup/g7f_build_qc_manifest.py	exact frozen source export
+scripts/g7_followup/g7f_consolidate.py	analysis/frozen_source/g7_followup/g7f_consolidate.py	exact frozen source export
+scripts/g7_followup/g7f_qc.py	analysis/frozen_source/g7_followup/g7f_qc.py	exact frozen source export
+scripts/g7_followup/g7f_run_caller.py	analysis/frozen_source/g7_followup/g7f_run_caller.py	exact frozen source export; PRJNA678459 bounded caller
+scripts/g7_followup/g7f_structure_update.py	analysis/frozen_source/g7_followup/g7f_structure_update.py	exact frozen source export; disease-blind bounded MinHash structure generator
+scripts/g7_followup/g7f_verify_membership.py	analysis/frozen_source/g7_followup/g7f_verify_membership.py	exact frozen source export
+metadata/g7/g7_population_structure_manifest.tsv	analysis/frozen_source/metadata/g7/g7_population_structure_manifest.tsv	historical structure manifest retained verbatim
+metadata/g7_followup/g7f_scope_rules.tsv	analysis/frozen_source/metadata/g7_followup/g7f_scope_rules.tsv	historical bounded follow-up rules retained verbatim
+metadata/g7_followup/g7f_qc_manifest.tsv	analysis/frozen_source/metadata/g7_followup/g7f_qc_manifest.tsv	historical follow-up QC manifest retained verbatim
+metadata/g7_followup/g7f_frozen_membership_manifest.tsv	analysis/frozen_source/metadata/g7_followup/g7f_frozen_membership_manifest.tsv	historical follow-up membership manifest retained verbatim
+results/g7_followup/g7f_locus_level_calls.tsv	results/calls/prjna678459_locus_calls.tsv	same authoritative bounded PRJNA678459 caller output
+results/g7_followup/g7f_structure_distance_matrix.tsv	results/structure/prjna678459_distance_matrix.tsv	same authoritative disease-blind structure matrix
+results/g7_followup/g7f_structure_nearest_neighbors.tsv	results/structure/prjna678459_nearest_neighbors.tsv	same authoritative nearest-neighbor table
