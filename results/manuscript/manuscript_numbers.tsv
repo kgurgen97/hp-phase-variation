@@ -30,7 +30,7 @@ hifi_exact	911	911	913	comparisons	results/validation/hifi_short_vs_hifi.tsv	com
 hifi_nonreference_comparisons	84			comparisons	results/validation/hifi_nonreference_summary.tsv	computed	ALL_HIGH_CONFIDENCE row
 hifi_nonreference_exact	82	82	84	comparisons	results/validation/hifi_nonreference_summary.tsv	computed	ALL_HIGH_CONFIDENCE row
 phase1_callable_union_loci	909			loci	results/callability/summary.tsv	manifest_only	direct recount requires full Phase-1 call matrix
-platform_study_confounded_callability_loci	182			loci	results/callability/summary.tsv	frozen_count	disease-blind technical classification
+platform_study_confounded_callability_loci	182			loci	results/callability/platform_transfer.tsv	computed	callability_class PLATFORM_CONFOUNDED_CALLABILITY; descriptive technical association, not causal platform effect
 confounding_correa_studies	45			studies	results/confounding/confounding_matrix.tsv	computed	rows
 confounding_correa_biosamples	793			biosamples	results/confounding/confounding_matrix.tsv	computed	sum n_correa_biosamples
 confounding_single_country_studies	41	41	45	studies	results/confounding/confounding_matrix.tsv	computed	current tracked table; supersedes stale 44/45 handoff number
