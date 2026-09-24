@@ -18,3 +18,18 @@ jobs:
       - run: python -m unittest discover -s tests
       - run: python analysis/check_publication_results.py
       - run: python analysis/check_manuscript_numbers.py
+
+  figure-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -r environment/figure-requirements.txt
+      - run: python analysis/figures/make_publication_figures.py --output-dir /tmp/publication-figures
+      - run: test "$(find /tmp/publication-figures -type f | wc -l)" -eq 12
+      - uses: actions/upload-artifact@v4
+        with:
+          name: publication-figures
+          path: /tmp/publication-figures
