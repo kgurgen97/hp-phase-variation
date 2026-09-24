@@ -32,3 +32,4 @@ venv/
 .DS_Store
 .idea/
 .vscode/
+\n# Large regenerable call matrices\nresults/calls/phase1_calls.tsv\n
