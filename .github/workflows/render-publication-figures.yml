@@ -61,6 +61,15 @@ jobs:
           find figures/main -type f -size -10k -print -quit | (! read)
       - name: Record tested figure environment
         run: python -m pip freeze > environment/figures-lock.txt
+      - name: Upload rendered figures for visual QA
+        uses: actions/upload-artifact@v4
+        with:
+          name: publication-figures
+          path: |
+            figures/main/
+            figures/source_data/
+            tables/main/
+          if-no-files-found: error
       - name: Commit rendered publication figures
         run: |
           git config user.name "github-actions[bot]"
