@@ -306,12 +306,12 @@ Within-cohort sample sizes, number of screened PRIMARY_TECHNICAL and PROVISIONAL
 1. Correa P. Human gastric carcinogenesis: a multistep and multifactorial process. *Cancer Res*. 1992;52:6735–6740. PMID: 1458460.
 2. IARC Working Group on the Evaluation of Carcinogenic Risks to Humans. Schistosomes, liver flukes and *Helicobacter pylori*. *IARC Monogr Eval Carcinog Risks Hum*. 1994;61:1–241.
 3. Falush D, Wirth T, Linz B, et al. Traces of human migrations in *Helicobacter pylori* populations. *Science*. 2003;299:1582–1585. doi:10.1126/science.1080857.
-4. Suerbaum S, Josenhans C. *Helicobacter pylori*: recombination, population structure and human migrations. *Int J Med Microbiol*. 2004;294:133–139. PMID: 15493823.
+4. Suerbaum S, Achtman M. *Helicobacter pylori*: recombination, population structure and human migrations. *Int J Med Microbiol*. 2004;294:133–139. doi:10.1016/j.ijmm.2004.06.014.
 5. Kennemann L, Didelot X, Aebischer T, et al. *Helicobacter pylori* genome evolution during human infection. *Proc Natl Acad Sci USA*. 2011;108:5033–5038. doi:10.1073/pnas.1018444108.
 6. Saunders NJ, Peden JF, Hood DW, Moxon ER. Simple sequence repeats in the *Helicobacter pylori* genome. *Mol Microbiol*. 1998;27:1091–1098. doi:10.1046/j.1365-2958.1998.00768.x.
 7. Salaün L, Linz B, Suerbaum S, Saunders NJ. The diversity within an expanded and redefined repertoire of phase-variable genes in *Helicobacter pylori*. *Microbiology (Reading)*. 2004;150:817–830. doi:10.1099/mic.0.26993-0.
 8. Appelmelk BJ, Martin SL, Monteiro MA, et al. Phase variation in *Helicobacter pylori* lipopolysaccharide due to changes in the lengths of poly(C) tracts in alpha3-fucosyltransferase genes. *Infect Immun*. 1999;67:5361–5366. doi:10.1128/IAI.67.10.5361-5366.1999.
-9. Goodwin AC, Weinberger DM, Ford CB, et al. Expression of the *Helicobacter pylori* adhesin SabA is controlled via phase variation and the ArsRS signal transduction system. *Microbiology (Reading)*. 2008. PMID: 18667556.
+9. Goodwin AC, Weinberger DM, Ford CB, et al. Expression of the *Helicobacter pylori* adhesin SabA is controlled via phase variation and the ArsRS signal transduction system. *Microbiology (Reading)*. 2008;154:2231–2240. doi:10.1099/mic.0.2007/016055-0.
 10. de Vries N, Duinsbergen D, Kuipers EJ, et al. Transcriptional phase variation of a type III restriction-modification system in *Helicobacter pylori*. *J Bacteriol*. 2002;184:6615–6624. doi:10.1128/JB.184.23.6615-6624.2002.
 11. Srikhanta YN, Gorrell RJ, Steen JA, et al. Phasevarion mediated epigenetic gene regulation in *Helicobacter pylori*. *PLoS One*. 2011;6:e27569. doi:10.1371/journal.pone.0027569.
 12. Treangen TJ, Salzberg SL. Repetitive DNA and next-generation sequencing: computational challenges and solutions. *Nat Rev Genet*. 2012;13:36–46. PMID: 22124482.
