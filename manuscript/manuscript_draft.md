@@ -248,15 +248,15 @@ Core result counts and statistics used in the Abstract, Results, and main figure
 
 3. de Vries N, Duinsbergen D, Kuipers EJ, et al. Transcriptional phase variation of a type III restriction-modification system in *Helicobacter pylori*. *J Bacteriol*. 2002;184:6615–6623. PMCID: PMC135423.
 
-4. Salaün L, Ayraud S, Saunders NJ. Phase variation mediated niche adaptation during prolonged experimental murine infection with *Helicobacter pylori*. [Background literature represented in the expanded phase-variable repertoire literature; final bibliographic verification required before submission.]
+4. Salaün L, Ayraud S, Saunders NJ. Phase variation mediated niche adaptation during prolonged experimental murine infection with *Helicobacter pylori*. *Microbiology*. 2005;151:917–923. doi:10.1099/mic.0.27379-0.
 
-5. Salaün L, Linz B, Suerbaum S, Saunders NJ. The diversity within an expanded and redefined repertoire of phase-variable genes in *Helicobacter pylori*. *Microbiology*. 2004. PMID: 15073292.
+5. Salaün L, Linz B, Suerbaum S, Saunders NJ. The diversity within an expanded and redefined repertoire of phase-variable genes in *Helicobacter pylori*. *Microbiology*. 2004;150:817–830. doi:10.1099/mic.0.26993-0.
 
 6. Falush D, Wirth T, Linz B, et al. Traces of human migrations in *Helicobacter pylori* populations. *Science*. 2003;299:1582–1585. doi:10.1126/science.1080857.
 
 7. Linz B, Balloux F, Moodley Y, et al. An African origin for the intimate association between humans and *Helicobacter pylori*. *Nature*. 2007;445:915–918. doi:10.1038/nature05562.
 
-8. Suerbaum S, Josenhans C. *Helicobacter pylori*: recombination, population structure and human migrations. *Int J Med Microbiol*. 2007;297:??. doi:10.1016/j.ijmm.2004.06.014. [Volume/page metadata to verify before submission.]
+8. Suerbaum S, Achtman M. *Helicobacter pylori*: recombination, population structure and human migrations. *Int J Med Microbiol*. 2004;294:133–139. doi:10.1016/j.ijmm.2004.06.014.
 
 9. Thorell K, Yahara K, Berthenet E, et al. The *Helicobacter pylori* Genome Project: insights into *H. pylori* population structure from analysis of a worldwide collection of complete genomes. *Nat Commun*. 2023. PMCID: PMC10713588.
 
@@ -264,10 +264,10 @@ Core result counts and statistics used in the Abstract, Results, and main figure
 
 11. Correa P. *Helicobacter pylori* infection and gastric adenocarcinoma. 2011. PMID: 21857882.
 
-12. Crowe SE. *Helicobacter pylori* infection. [Contemporary review of pathogenesis and gastric carcinogenesis; final journal metadata to verify before submission.]
+12. Malfertheiner P, Camargo MC, El-Omar E, et al. *Helicobacter pylori* infection. *Nat Rev Dis Primers*. 2023;9:19. doi:10.1038/s41572-023-00431-8.
 
-13. Gymrek M. A genomic view of short tandem repeats. [Background reference for short-read STR measurement limitations; final bibliographic metadata to verify before submission.]
+13. Gymrek M. A genomic view of short tandem repeats. *Curr Opin Genet Dev*. 2017;44:9–16. doi:10.1016/j.gde.2017.01.012.
 
-14. Mousavi N, Shleizer-Burko S, Yanicky R, Gymrek M. Profiling the genome-wide landscape of tandem repeat variation. [Background methodological reference; final bibliographic metadata to verify before submission.]
+14. Mousavi N, Shleizer-Burko S, Yanicky R, Gymrek M. Profiling the genome-wide landscape of tandem repeat expansions. *Nucleic Acids Res*. 2019;47:e90. doi:10.1093/nar/gkz501.
 
 15. Microbiology Society. Microbial Genomics: aims and scope; prepare-an-article guidance; author submission checklist. Accessed 24 September 2026.
