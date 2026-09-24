@@ -8,15 +8,21 @@ The publication package separates tracked manuscript-facing outputs from raw pub
 
 The authoritative Phase-1 call matrix is not duplicated in the clean publication repository. Its development-archive path is `results/g5/g5_phase1_calls.tsv`, Git blob SHA is `58486570113e1cde6d0668db1b8d2a6fe38b1915`, and file size is 17,870,238 bytes. The clean repository records this identity together with the regeneration script and raw-data manifest in `results/calls/phase1_calls.MANIFEST.tsv`.
 
-### S2. Reference-panel construction
+### S2. Reference-panel construction and repeat discovery
 
 Repeat discovery used a frozen eight-genome *H. pylori* RefSeq panel. Reference FASTA and GFF accessions, checksums, and source URLs are tracked in `metadata/loci/reference_panel.tsv`. The publication analysis treats this panel as a pragmatic multi-reference discovery set rather than as exhaustive representation of global *H. pylori* diversity.
+
+Frozen discovery rules considered 1–6 nt motifs. Pure homopolymers required at least 8 bases; dinucleotide repeats required at least 5 copies; 3–4 nt motifs required at least 4 copies; and 5–6 nt motifs required at least 3 copies with total tract length of at least 12 bp. Motifs were normalized to the shortest canonical period across rotations and strands. Loci longer than 100 bp were recorded but not caller-eligible. Unique anchoring required the immediate 25-bp left and right flanks to be unique in the corresponding genome and not themselves contain a qualifying repeat tract.
 
 ### S3. Repeat-locus evidence terminology
 
 Repeat-locus membership, phase-variation evidence, and technical eligibility are separate variables. Member-level evidence includes REPEAT_ONLY and STRONG_PV_CANDIDATE; literature-anchored loci can separately carry KNOWN_PV evidence. The frozen technical classes PRIMARY_TECHNICAL, PROVISIONAL_TECHNICAL, and PRIMARY_INELIGIBLE are measurement/analysis classes and do not imply experimentally demonstrated ON/OFF switching.
 
-### S4. Validation denominators
+### S4. Frozen caller gates and validation denominators
+
+Read extraction used 25-bp flanking anchors and a 12-mer seed index. Up to two mismatches per anchor were allowed during extraction. At call stage, supporting fragments required mean anchor quality ≥20 and at most three total anchor mismatches. A locus required at least eight filtered spanning fragments, a dominant-allele fraction ≥0.40, a top-two-allele fraction ≥0.80, and an off-unit fraction ≤0.30 to remain callable. Confidence classification incorporated depth, strand balance, and the Wilson lower confidence bound on dominant fraction. The frozen noise model included motif-class-specific stutter estimates derived during development and a twofold safety factor. These are measurement rules, not disease-derived thresholds.
+
+
 
 Synthetic performance is reported with explicit denominator nesting. The empirical benchmark contained 2,720 comparisons, of which 1,780 were callable. Exact dominant-repeat-length concordance is therefore reported as 1,757/1,780 among callable comparisons, while false-confident error is reported as 15/1,595 among HIGH/MEDIUM-confidence callable comparisons.
 
@@ -24,13 +30,17 @@ For long-read validation, the full isolate-locus truth universe comprised 5,980 
 
 ### S5. Pilot endpoint gate
 
+Primary disease analysis was restricted to the 261 PRIMARY_TECHNICAL mono-A/T loci. Before labels were used for testing, the frozen per-contrast locus screen required: (i) overall callability fraction ≥0.80 across the contrast sample set; (ii) at least two distinct observed dominant repeat lengths among callable samples; and (iii) a minor-allele count ≥2. Failing loci were excluded without imputation or recoding. PROVISIONAL_TECHNICAL loci were processed separately and never merged into the primary multiple-testing family.
+
 The strict cohort-level multivariate endpoint required at least 10 jointly callable loci for every sample pair entering the distance analysis. PRJNA360417 had four primary loci passing the frozen cohort-level screen, with pairwise coverage 2–4 loci. PRJNA678459 had six primary loci passing the screen (plus one provisional locus), with pairwise coverage 4–6 loci. Both strict endpoints were therefore NOT_COMPUTABLE. Below-floor permutation statistics are retained only as diagnostics.
 
 PRJNA1103397 was GC-only in the frozen pilot package and had zero primary loci passing the cohort-level screen; no disease contrast was performed.
 
+PRJNA678459 used the already-frozen disease-blind G7-follow-up caller output, generated with extraction capped at 500,000 read fragments per sample. This bounded execution was retained unchanged in G8 and is not described as a full-depth rerun.
+
 ### S6. Structure diagnostic
 
-PRJNA678459 received a disease-blind read-based k-mer/MinHash screening structure analysis. The frozen result was pseudo-F 1.0506, R² 0.1161, exact p 0.031746 with 252 permutations. This is reported only as a confounding warning. It is not an ancestry-adjusted disease model and is not evidence for a repeat-length disease association. PRJNA360417 remains NOT_PERFORMED for structure analysis.
+PRJNA678459 received a disease-blind read-based k-mer/MinHash screening structure analysis. The frozen implementation used canonical k=21, a bottom-1,000 sketch with deterministic zlib.crc32 hashing, and the first 30,000 read pairs per sample. The 10 read-based sample sketches were positioned relative to the frozen 32-genome G7 screening panel. Disease labels were not read by the structure-generation script and were overlaid only in G8. The frozen result was pseudo-F 1.0506, R² 0.1161, exact p 0.031746 with 252 permutations. This is reported only as a confounding warning. It is not an ancestry-adjusted disease model and is not evidence for a repeat-length disease association. PRJNA360417 remains NOT_PERFORMED for structure analysis.
 
 ## Supplementary Tables
 
