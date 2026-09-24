@@ -7,22 +7,45 @@ import matplotlib.pyplot as plt
 
 ROOT = Path(__file__).resolve().parents[2]
 STYLE = json.loads((ROOT / "config/figure_style.json").read_text())
-P = STYLE["palette"]
+RAW = STYLE["palette"]
+
+# Compatibility aliases used by the figure scripts. These are deterministic
+# semantic mappings onto the literal, reference-derived palette stored in the
+# JSON source of truth; no new colors are invented here.
+P = {
+    **RAW,
+    "off_white": RAW["background"],
+    "axis": RAW["muted_text"],
+    "grid": RAW["neutral_light"],
+    "primary_blue": RAW["primary_indigo"],
+    "primary_blue_dark": RAW["text"],
+    "provisional_teal": RAW["teal"],
+    "candidate_magenta": RAW["mauve"],
+    "known_pv_gold": RAW["gold"],
+    "ambiguity_purple": RAW["plum"],
+    "warning_coral": RAW["orange"],
+    "support_green": RAW["green"],
+    "neutral_gray": RAW["neutral"],
+    "ineligible_gray": RAW["neutral_light"],
+    "light_blue": RAW["blue"],
+    "light_pink": RAW["salmon"],
+}
 
 
 def apply_style():
-    m = STYLE["matplotlib"]
+    s = STYLE["svg"]
     plt.rcParams.update({
-        "font.family": m["font_family"],
-        "font.size": m["font_size"],
-        "axes.labelsize": m["axes_labelsize"],
-        "axes.titlesize": m["axes_titlesize"],
-        "xtick.labelsize": m["xtick_labelsize"],
-        "ytick.labelsize": m["ytick_labelsize"],
-        "legend.fontsize": m["legend_fontsize"],
-        "axes.linewidth": m["axes_linewidth"],
-        "xtick.major.width": m["tick_width"],
-        "ytick.major.width": m["tick_width"],
+        "font.family": "Arial",
+        "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
+        "font.size": 8.0,
+        "axes.labelsize": 8.0,
+        "axes.titlesize": 9.0,
+        "xtick.labelsize": 7.0,
+        "ytick.labelsize": 7.0,
+        "legend.fontsize": 7.0,
+        "axes.linewidth": 0.6,
+        "xtick.major.width": 0.6,
+        "ytick.major.width": 0.6,
         "axes.edgecolor": P["axis"],
         "axes.labelcolor": P["text"],
         "text.color": P["text"],
