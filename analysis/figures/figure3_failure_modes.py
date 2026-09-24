@@ -28,6 +28,7 @@ def pretty_reason(x):
         "BOUNDARY_AUDIT_BOUNDARY_AMBIGUOUS": "Boundary ambiguous",
         "NOT_CALLABLE_OR_NOT_CALLER_ELIGIBLE_UNDER_G5": "Not caller-eligible / callable",
         "G5_PLATFORM_CONFOUNDED_CALLABILITY": "Platform/study-confounded callability",
+        "PLATFORM_CONFOUNDED_CALLABILITY": "Platform/study-confounded callability",
         "KNOWN_PV_INSUFFICIENT_EMPIRICAL_VALIDATION": "KNOWN_PV insufficient validation",
         "MOTIF_CLASS_NOT_PRIMARY_VALIDATED": "Motif class not primary-validated",
     }
