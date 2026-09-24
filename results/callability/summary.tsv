@@ -1,0 +1,3 @@
+metric	value	source	note
+phase1_callable_union_loci	909	results/g5/g5_phase1_calls.tsv	Distinct loci callable in at least one Phase-1 sample; direct recount requires the large matrix recorded in results/calls/phase1_calls.MANIFEST.tsv.
+platform_study_confounded_callability_loci	182	results/g5/g5_platform_transfer.tsv	Disease-blind technical classification; use "platform/study-confounded callability", not causal "platform effect".
