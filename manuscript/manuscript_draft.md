@@ -258,7 +258,7 @@ Core result counts and statistics used in the Abstract, Results, and main figure
 
 8. Suerbaum S, Achtman M. *Helicobacter pylori*: recombination, population structure and human migrations. *Int J Med Microbiol*. 2004;294:133–139. doi:10.1016/j.ijmm.2004.06.014.
 
-9. Thorell K, Yahara K, Berthenet E, et al. The *Helicobacter pylori* Genome Project: insights into *H. pylori* population structure from analysis of a worldwide collection of complete genomes. *Nat Commun*. 2023. PMCID: PMC10713588.
+9. Thorell K, Muñoz-Ramírez ZY, Wang D, et al. The *Helicobacter pylori* Genome Project: insights into *H. pylori* population structure from analysis of a worldwide collection of complete genomes. *Nat Commun*. 2023;14:8184. doi:10.1038/s41467-023-43562-y.
 
 10. Correa P, Piazuelo MB. The gastric precancerous cascade. *J Dig Dis*. 2012;13:2–9. doi:10.1111/j.1751-2980.2011.00550.x.
 
