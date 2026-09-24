@@ -29,3 +29,7 @@ jobs:
       - run: python -m pip install -r environment/figure-requirements.txt
       - run: python analysis/figures/make_publication_figures.py --output-dir /tmp/publication-figures
       - run: test "$(find /tmp/publication-figures -type f | wc -l)" -eq 12
+      - uses: actions/upload-artifact@v4
+        with:
+          name: publication-figures
+          path: /tmp/publication-figures
