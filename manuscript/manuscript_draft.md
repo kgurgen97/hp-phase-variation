@@ -18,16 +18,6 @@ Individual BioSample and run accessions are enumerated in the tracked manifests 
 
 *Helicobacter pylori*; phase variation; tandem repeats; short-read sequencing; long-read validation; population structure; gastric carcinogenesis; reproducible genomics
 
-## Data Summary
-
-All manuscript-facing code, configuration, metadata, validation summaries, pilot outputs, numerical audits, and figure-rendering scripts are contained in the publication repository. Public sequencing accessions used by the frozen workflow are listed in the tracked manifests under `metadata/cohorts/` and `metadata/validation/`. Raw sequencing data are not redistributed.
-
-The large Phase-1 call matrix is not duplicated in the clean publication repository. Its authoritative development-archive location, Git blob SHA (`58486570113e1cde6d0668db1b8d2a6fe38b1915`), size (17,870,238 bytes), reconstruction script, and public raw-data manifest are recorded in `results/calls/phase1_calls.MANIFEST.tsv`. Manuscript-facing derived values are stored in `results/manuscript/manuscript_numbers.tsv` and checked automatically against tracked frozen outputs.
-
-## Impact Statement
-
-Repeat-mediated phase variation is biologically important in *Helicobacter pylori*, but repetitive sequence and extreme bacterial population structure make short-read measurements unusually vulnerable to technical and epidemiological confounding. This study provides a reproducible framework that separates repeat-locus discovery, biological evidence for phase variation, technical callability, long-read validation, and disease-analysis eligibility. The caller showed high exact concordance in synthetic and HiFi-supported comparisons, including non-reference alleles, while the broader analysis exposed substantial boundary, orthology, and callability limitations. Applying frozen rules to public gastric-disease cohorts showed that the available data could not support the intended strict disease-association endpoint. The work therefore supplies a validated technical resource and, equally importantly, a transparent definition of when public short-read data are insufficient for biological inference.
-
 ## Introduction
 
 *Helicobacter pylori* is a genetically diverse gastric bacterium in which repeat-length changes can alter coding or regulatory sequence and, for experimentally supported loci, generate reversible functional states [1–5]. This biology makes short tandem and homopolymeric repeat loci attractive candidates for studying rapid adaptation within the gastric niche. It also creates a measurement problem: the same sequence properties that make repeat tracts mutable make them difficult to infer reliably from short reads, a challenge also recognized in broader STR genotyping work [6,7].
@@ -36,7 +26,7 @@ Several distinct sources of error can mimic or obscure true repeat-length variat
 
 We designed the present study around that distinction. The primary objective was not to claim that every repeat locus is an experimentally established phase-variable locus, nor to force a gastric-cancer association analysis from heterogeneous public datasets. Instead, we sought to build and validate a conservative short-read framework that separates: (i) repeat-locus discovery, (ii) biological evidence for phase variation, (iii) technical callability, and (iv) downstream disease-analysis eligibility.
 
-The study was developed in staged gates against the biological background of the Correa gastric precancerous cascade [10–12]. We first constructed a multi-reference repeat catalogue, audited locus boundaries and orthology, and defined technical eligibility. We then evaluated the caller using empirical synthetic data and independent high-accuracy long-read truth. Finally, with all analytical rules frozen, we tested whether available public gastric-disease cohorts could support the originally intended disease-association analysis across disease states related to the Correa model of gastric carcinogenesis [12]. This last stage was treated as a stress test of identifiability rather than as a requirement to produce a positive association result.
+The study was developed in staged gates against the biological background of the Correa gastric precancerous cascade [12]. We first constructed a multi-reference repeat catalogue, audited locus boundaries and orthology, and defined technical eligibility. We then evaluated the caller using empirical synthetic data and independent high-accuracy long-read truth. Finally, with all analytical rules frozen, we tested whether available public gastric-disease cohorts could support the originally intended disease-association analysis across disease states related to the Correa model of gastric carcinogenesis [12]. This last stage was treated as a stress test of identifiability rather than as a requirement to produce a positive association result.
 
 ## Methods
 
@@ -238,36 +228,3 @@ Core result counts and statistics used in the Abstract, Results, and main figure
 17. Hu L, Zeng X, Ai Q, Liu C, Zhang X, Chen Y, Liu L, Li GQ. Long-read- and short-read-based whole-genome sequencing reveals the antibiotic resistance pattern of *Helicobacter pylori*. Microbiol Spectr. 2023;11:e04522-22. doi:10.1128/spectrum.04522-22.
 18. Kong PF, Yan YH, Duan YT, Fang YT, Dou Y, Xu YH, Xu DZ. Comparative genomic analysis of *Helicobacter pylori* isolates from gastric cancer and gastritis in China. BMC Cancer. 2025;25:628. doi:10.1186/s12885-025-13493-6.
 19. Zhang X, Liu H, Xu S, Zhang S, Yang T, Lei Z, et al. Within-host diversity and phased variant analysis reveal structures and recombination of *Helicobacter pylori* subpopulations in stomach. GigaScience. 2026;15:giag046. doi:10.1093/gigascience/giag046.
-
-
-## References
-
-1. Saunders NJ, Peden JF, Hood DW, Moxon ER. Simple sequence repeats in the *Helicobacter pylori* genome. *Mol Microbiol*. 1998;27:1091–1098. PMID: 9570395.
-
-2. Appelmelk BJ, Martin SL, Monteiro MA, et al. Phase variation in *Helicobacter pylori* lipopolysaccharide due to changes in the lengths of poly(C) tracts in alpha3-fucosyltransferase genes. *Infect Immun*. 1999;67:5361–5366. doi:10.1128/IAI.67.10.5361-5366.1999.
-
-3. de Vries N, Duinsbergen D, Kuipers EJ, et al. Transcriptional phase variation of a type III restriction-modification system in *Helicobacter pylori*. *J Bacteriol*. 2002;184:6615–6623. PMCID: PMC135423.
-
-4. Salaün L, Ayraud S, Saunders NJ. Phase variation mediated niche adaptation during prolonged experimental murine infection with *Helicobacter pylori*. *Microbiology*. 2005;151:917–923. doi:10.1099/mic.0.27379-0.
-
-5. Salaün L, Linz B, Suerbaum S, Saunders NJ. The diversity within an expanded and redefined repertoire of phase-variable genes in *Helicobacter pylori*. *Microbiology*. 2004;150:817–830. doi:10.1099/mic.0.26993-0.
-
-6. Falush D, Wirth T, Linz B, et al. Traces of human migrations in *Helicobacter pylori* populations. *Science*. 2003;299:1582–1585. doi:10.1126/science.1080857.
-
-7. Linz B, Balloux F, Moodley Y, et al. An African origin for the intimate association between humans and *Helicobacter pylori*. *Nature*. 2007;445:915–918. doi:10.1038/nature05562.
-
-8. Suerbaum S, Achtman M. *Helicobacter pylori*: recombination, population structure and human migrations. *Int J Med Microbiol*. 2004;294:133–139. doi:10.1016/j.ijmm.2004.06.014.
-
-9. Thorell K, Muñoz-Ramírez ZY, Wang D, et al. The *Helicobacter pylori* Genome Project: insights into *H. pylori* population structure from analysis of a worldwide collection of complete genomes. *Nat Commun*. 2023;14:8184. doi:10.1038/s41467-023-43562-y.
-
-10. Correa P, Piazuelo MB. The gastric precancerous cascade. *J Dig Dis*. 2012;13:2–9. doi:10.1111/j.1751-2980.2011.00550.x.
-
-11. Correa P. *Helicobacter pylori* infection and gastric adenocarcinoma. 2011. PMID: 21857882.
-
-12. Malfertheiner P, Camargo MC, El-Omar E, et al. *Helicobacter pylori* infection. *Nat Rev Dis Primers*. 2023;9:19. doi:10.1038/s41572-023-00431-8.
-
-13. Gymrek M. A genomic view of short tandem repeats. *Curr Opin Genet Dev*. 2017;44:9–16. doi:10.1016/j.gde.2017.01.012.
-
-14. Mousavi N, Shleizer-Burko S, Yanicky R, Gymrek M. Profiling the genome-wide landscape of tandem repeat expansions. *Nucleic Acids Res*. 2019;47:e90. doi:10.1093/nar/gkz501.
-
-15. Microbiology Society. Microbial Genomics: aims and scope; prepare-an-article guidance; author submission checklist. Accessed 24 September 2026.
