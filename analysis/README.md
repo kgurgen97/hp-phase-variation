@@ -14,9 +14,9 @@ These checks do not download reads, change thresholds, redefine disease groups, 
 
 ## Frozen generating source
 
-`analysis/frozen_source/` is a curated export of exact tracked scripts from the authoritative development archive at Project A closeout. It covers catalogue construction, synthetic benchmarking, Phase-1 callability, boundary/orthology audit, HiFi validation, technical locus-universe construction, confounding audit, pilot disease analysis, and structure-diagnostic summarization.
+`analysis/frozen_source/` is a curated export of exact tracked scripts from the authoritative development archive at Project A closeout. It covers catalogue construction, synthetic benchmarking, Phase-1 callability, boundary/orthology audit, HiFi validation, technical locus-universe construction, confounding audit, the bounded disease-blind G7 PRJNA678459 follow-up that generated caller/structure inputs, pilot disease analysis, and structure-diagnostic summarization.
 
-Scripts are preserved verbatim. Their internal G5-G8 paths are historical provenance, not a second set of publication results. `analysis/path_map.tsv` maps historical paths to the normalized publication layout, and `analysis/reproduction_manifest.tsv` states the reproduction boundary for each result family.
+Scripts and the follow-up manifests needed to interpret bounded execution are preserved verbatim. Their internal G5-G8 paths are historical provenance, not a second set of publication results. `analysis/path_map.tsv` maps historical paths to the normalized publication layout, and `analysis/reproduction_manifest.tsv` states the reproduction boundary for each result family.
 
 ## Public data manifests
 
