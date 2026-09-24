@@ -101,8 +101,9 @@ def main():
 
     callability = {r["metric"]: r for r in read_tsv("results/callability/summary.tsv")}
     expect("phase1_callable_union_loci", callability["phase1_callable_union_loci"]["value"])
+    platform = read_tsv("results/callability/platform_transfer.tsv")
     expect("platform_study_confounded_callability_loci",
-           callability["platform_study_confounded_callability_loci"]["value"])
+           sum(r["callability_class"] == "PLATFORM_CONFOUNDED_CALLABILITY" for r in platform))
 
     conf = read_tsv("results/confounding/confounding_matrix.tsv")
     expect("confounding_correa_studies", len(conf))
