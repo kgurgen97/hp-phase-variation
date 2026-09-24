@@ -1,0 +1,9 @@
+domain	metric	value	note
+Public Correa-labelled data	Studies	45	Audited studies
+Public Correa-labelled data	BioSamples	793	Audited BioSamples
+Geography	Single-country studies	41/45	Current tracked table; supersedes stale 44/45 handoff value
+Geography	Multi-country studies	4/45	Four studies
+Phase-1	Callable union	909	Manifest-backed unless full Phase-1 matrix materialized
+Phase-1	Platform/study-confounded callability	182	Descriptive technical association, not causal platform effect
+Discovery/replication	Adequate G9 discovery set	NONE	BLOCKED_NO_ADEQUATE_DISCOVERY_DATA
+Discovery/replication	Independent replication set	NONE	No replication analysis performed

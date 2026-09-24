@@ -1,0 +1,16 @@
+panel	category	value
+A/C	catalogue_loci	1405
+A/C	caller_eligible_loci	1196
+A/C	boundary_stable_loci	400
+A/C	primary_technical_loci	261
+A/C	provisional_technical_loci	39
+A/C	primary_ineligible_loci	1105
+B	Boundary stable	400
+B	Boundary ambiguous	48
+B	Orthology ambiguous	497
+B	Insufficient to resolve	460
+D	REPEAT_ONLY	243
+D	STRONG_PV_CANDIDATE	15
+D	Mixed member-level evidence	3
+D	KNOWN_PV_in_PRIMARY	0
+D	KNOWN_PV_catalogue_total	8

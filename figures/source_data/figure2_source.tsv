@@ -1,0 +1,9 @@
+panel	metric	numerator	denominator	fraction
+A	synthetic_exact	1757	1780	0.9870786516853932
+B	synthetic_false_confident_wrong	15	1595	0.009404388714733543
+D	hifi_exact	911	913	0.9978094194961665
+E	hifi_reference_exact	829	829	1.0
+E	hifi_nonreference_exact	82	84	0.9761904761904762
+F	hifi_high_confidence_truth	1034	5980	0.1729096989966555
+F	hifi_ambiguous_truth	1453	5980	0.24297658862876254
+F	hifi_uncallable_truth	3493	5980	0.584113712374582

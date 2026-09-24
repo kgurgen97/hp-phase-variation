@@ -1,0 +1,15 @@
+section	metric	value	denominator	note
+Catalogue	Repeat loci	1405		Multi-reference repeat-locus catalogue
+Catalogue	Catalogue members	4009		Reference-panel members
+Catalogue	Caller-eligible loci	1196		Initial G5 technical eligibility
+Boundary/orthology	BOUNDARY_STABLE	400	1405	Disease-blind audit
+Boundary/orthology	BOUNDARY_AMBIGUOUS	48	1405	Disease-blind audit
+Boundary/orthology	ORTHOLOGY_AMBIGUOUS	497	1405	Disease-blind audit
+Boundary/orthology	INSUFFICIENT_TO_RESOLVE	460	1405	Disease-blind audit
+Final universe	PRIMARY_TECHNICAL	261	1405	Primary technical repeat-locus universe
+Final universe	PROVISIONAL_TECHNICAL	39	1405	Prespecified sensitivity only
+Final universe	PRIMARY_INELIGIBLE	1105	1405	Excluded technically
+Synthetic validation	Exact dominant allele	1757	1780	98.7% of callable empirical comparisons
+Synthetic validation	False-confident wrong dominant allele	15	1595	0.94% of HIGH/MEDIUM-confidence calls
+HiFi validation	Exact high-confidence comparisons	911	913	Descriptive per-comparison concordance
+HiFi validation	Exact non-reference comparisons	82	84	Non-reference repeat lengths

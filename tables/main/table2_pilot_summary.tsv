@@ -1,0 +1,4 @@
+cohort	contrast	group_sizes	primary_passed	provisional_passed	pairwise_coverage	strict_endpoint	diagnostic_exact_p	structure_status	interpretation
+PRJNA360417	NAG vs IM	5 vs 6	4	0	2-4	NOT_COMPUTABLE	0.770563	NOT_PERFORMED	Below prespecified >=10-locus pairwise floor
+PRJNA678459	AG vs GC	5 vs 5	6	1	4-6	NOT_COMPUTABLE	0.142857	SCREENING_STRUCTURE_ONLY; exact p=0.031746	Below prespecified >=10-locus pairwise floor; structure result is a confounding caution
+PRJNA1103397	GC only	6 isolates; one selected isolate per patient reported	0	NA	NA	NO_CONTRAST	NA	NOT_APPLICABLE	Explicit patient identifiers unavailable; no disease contrast
