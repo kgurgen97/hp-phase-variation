@@ -4,7 +4,7 @@ from __future__ import annotations
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
-from io import manuscript_numbers, n_int, write_tsv
+from figure_io import manuscript_numbers, n_int, write_tsv
 from style import P, apply_style, clean_axis, panel_label, save_figure, source_path
 
 apply_style()
