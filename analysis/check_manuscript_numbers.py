@@ -34,6 +34,11 @@ def main():
         if got != want:
             failures.append(f"{metric}: manuscript={got!r}, computed={want!r}")
 
+    panel = read_tsv("metadata/loci/reference_panel.tsv")
+    expect("reference_panel_genomes", len(panel))
+    if len({r["short_code"] for r in panel}) != len(panel):
+        failures.append("reference panel contains duplicate short_code values")
+
     catalogue = read_tsv("metadata/loci/repeat_catalogue.tsv")
     by_locus = defaultdict(list)
     for row in catalogue:
