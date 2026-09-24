@@ -1,0 +1,313 @@
+# Conservative short-read profiling of *Helicobacter pylori* repeat tracts: PacBio HiFi validation and limits of phase-variation inference in public cohorts
+
+**Running title:** Conservative profiling of *H. pylori* repeat tracts
+
+**Authors:** [AUTHOR LIST TO BE COMPLETED]
+
+**Affiliations:** [AFFILIATIONS TO BE COMPLETED]
+
+**Corresponding author:** [TO BE COMPLETED]
+
+## Abstract
+
+Repeat-mediated phase variation is an important source of phenotypic heterogeneity in *Helicobacter pylori*, but repeat tracts are difficult to quantify from heterogeneous short-read data. We developed a conservative multi-reference workflow for profiling repeat-length alleles at technically resolvable loci and evaluated its use in public gastric-disease cohorts. A catalogue built from eight reference genomes contained 1,405 repeat loci (4,009 catalogue members); 1,196 loci were initially caller-eligible. A disease-blind boundary and orthology audit classified 400 loci as boundary-stable, 48 as boundary-ambiguous, 497 as orthology-ambiguous and 460 as insufficient to resolve. After integrating these constraints with motif-specific validation and study-associated callability, 261 loci were retained as PRIMARY_TECHNICAL and 39 as PROVISIONAL_TECHNICAL. The primary set was principally a technical repeat-locus universe: 243 loci were REPEAT_ONLY, 15 were STRONG_PV_CANDIDATE, three had mixed member-level evidence annotations, and none of eight literature-anchored KNOWN_PV loci entered the primary set. In an empirical synthetic benchmark, the dominant repeat-length allele was exact in 1,757/1,780 callable comparisons (98.7%); 15/1,595 HIGH/MEDIUM-confidence calls had an incorrect dominant allele (0.94%). Against raw PacBio HiFi evidence from five isolates, 911/913 high-confidence short-read comparisons were exact (99.8%); concordance was 82/84 for non-reference repeat lengths. Public disease data were substantially more limiting than technical concordance. Across 45 Correa-labelled studies (793 BioSamples), disease stage was strongly entangled with study, geography, platform and other cohort attributes. The two within-cohort pilot contrasts retained only 4/261 and 6/261 primary loci after pre-specified callability and variability screening, and neither met the pre-specified minimum of ten jointly callable loci per sample pair. Their strict cohort-level endpoints were therefore non-computable. These results define a reproducible short-read framework for repeat-length profiling while showing that reliable measurement at resolvable loci does not by itself make current public cohorts adequate for testing phase-variable adaptation across gastric carcinogenesis.
+
+**Keywords:** *Helicobacter pylori*; tandem repeats; phase variation; short-read sequencing; PacBio HiFi; repeat-length allele; reproducibility; gastric disease; population structure
+
+## Introduction
+
+*Helicobacter pylori* persists for decades in a host environment that changes across anatomical niches, inflammatory states and disease progression. Infection is a major cause of gastric disease and is carcinogenic to humans, while intestinal-type gastric carcinogenesis is commonly described as a multistep sequence progressing through chronic gastritis, atrophy, intestinal metaplasia and dysplasia before carcinoma [1,2]. The bacterium itself is unusually diverse: geographically structured populations coexist with extensive recombination, and within-host evolution can generate substantial genomic heterogeneity during chronic infection [3–5]. Any attempt to relate bacterial genotype to gastric phenotype therefore has to distinguish a putative disease-associated signal from ancestry, geography, study design and within-host population structure.
+
+Simple sequence repeats provide an additional, unusually labile layer of variation. Early genome analyses identified homopolymeric and short tandem repeats in *H. pylori* genes whose length could alter coding frames or regulatory sequence properties [6]. Comparative work subsequently expanded the proposed phase-variable repertoire and demonstrated that repeat-associated switching is heterogeneous across loci and strains rather than a uniform property of every repeat tract [7]. Experimentally supported examples include fucosyltransferase loci involved in lipopolysaccharide antigen expression [8], the SabA adhesin [9], and phase-variable restriction–modification systems including ModH-associated phasevarions [10,11]. These observations motivate a biologically interesting hypothesis: genetically distinct *H. pylori* populations might converge on similar reversible repeat-associated states under shared host selection.
+
+Testing that hypothesis at population scale is technically non-trivial. Tandem repeats are a difficult variant class for short-read sequencing because informative reads must resolve the repeat and its flanking sequence, while repetitive or paralogous context creates mapping ambiguity and polymerase or amplification errors can generate stutter-like minor alleles [12,13]. Long reads reduce the spanning-length constraint but do not make locus definition, orthology or repeat-boundary assignment automatic. For a highly recombining species such as *H. pylori*, locus identity across divergent strains is itself part of the measurement problem.
+
+Public sequencing data add a second layer of difficulty. Studies differ in geography, sampling frame, sequencing platform, read configuration, biopsy site and patient multiplicity. Disease labels are often study-specific, and bacterial population structure is strongly geographic [3,4]. A cross-study disease comparison can therefore be statistically non-identifiable even when many sequences are available. Conversely, restricting analysis to a technically clean locus set and to defensible within-study contrasts can leave too few jointly callable polymorphic loci for meaningful multivariate testing.
+
+We therefore reframed the analysis around a methodological question: which repeat-length alleles can be measured reproducibly from heterogeneous public short-read *H. pylori* data, and what prevents those measurements from supporting a broader gastric-disease inference? We built a multi-reference repeat catalogue, developed a spanning-read caller with explicit callability rules, evaluated synthetic performance, performed disease-blind boundary/orthology and platform-associated callability audits, and compared short-read calls with raw PacBio HiFi evidence. We then applied the frozen technical framework to a limited set of public gastric-disease cohorts. The primary output is a technically filtered repeat-locus framework and an explicit account of its failure modes. The gastric-disease analysis is a stress test of what the available public data can support, not a definitive test of phase-variable adaptation across carcinogenesis.
+
+## Materials and Methods
+
+### Study design and analytical freeze
+
+The project was organized as a sequence of disease-blind technical gates followed by a limited pilot disease analysis. Caller parameters, repeat-discovery rules, technical eligibility rules and pilot screening/statistical rules were fixed before final disease-associated interpretation. No locus was promoted, no threshold was relaxed and no disease group was redefined in response to an association result. Multiple isolates from the same patient were not treated as independent patients when patient relationships were known.
+
+The publication-facing measurable object is the **repeat-length allele**. Repeat loci were annotated by evidence class, but repeat-locus membership was not treated as proof of experimentally established phase variation. Likewise, sample-specific ON/OFF functional states were not used in the real-sample disease analysis because sample-specific open-reading-frame integrity and locus-specific functional switching were not established broadly enough to support that interpretation.
+
+All manuscript-facing numerical claims were reconciled to a machine-readable source table (`results/manuscript/manuscript_numbers.tsv`) and checked in continuous integration against tracked results. The historical development environment was only partially recorded; the publication repository therefore distinguishes the historical execution environment from a newly tested reproduction baseline rather than retrospectively inventing software versions.
+
+### Multi-reference repeat catalogue
+
+Repeat discovery used an eight-genome *H. pylori* reference panel. Motifs of 1–6 nt were considered. Pure homopolymers required at least 8 identical bases; dinucleotide tracts required at least five repeat units; motifs of length 3–4 required at least four copies, and motifs of length 5–6 required at least three copies with a total tract length of at least 12 bp. Motifs were canonicalized across cyclic rotations and reverse complements. Interrupted tracts with a 1–2-bp gap and compound adjacent repeat structures were retained with explicit flags, but compound loci were not caller-eligible.
+
+For every catalogue member, 40-bp flanks were recorded; 25-bp immediately adjacent anchors were used for uniqueness assessment. A member was uniquely anchorable only when both 25-bp anchors occurred exactly once, considering both strands, in its source genome and did not themselves contain a qualifying repeat tract. Tracts longer than 100 bp were retained in the catalogue but excluded from short-read calling.
+
+Putative orthologous repeat loci across references were grouped using flanking-sequence evidence and annotation/neighbourhood support, with ambiguous multi-matches retained as ambiguous rather than forcibly merged. Stable project locus identifiers were assigned to orthology groups and singletons.
+
+### Evidence classes
+
+Catalogue evidence classes were kept distinct from technical eligibility. Literature-anchored KNOWN_PV loci required a reconciled match between the catalogue and repeat-associated phase-variation evidence. STRONG_PV_CANDIDATE denoted repeat loci with stronger disease-independent comparative support for repeat-length variability and compatible sequence context. Remaining repeat loci were classified as REPEAT_ONLY. Final evidence-class reconciliation was performed before disease analysis.
+
+The catalogue contained eight literature-anchored KNOWN_PV loci. Their presence in the catalogue did not guarantee technical suitability: all eight were excluded from the final PRIMARY_TECHNICAL universe. This distinction was maintained throughout the analysis.
+
+### Short-read repeat-length caller
+
+The caller identified fragments spanning a repeat tract using locus-specific flanking anchors. The frozen parameters used 25-bp anchors, 12-bp seed k-mers and a seed stride of four. Extraction permitted at most two mismatches per anchor and scanned candidate inter-anchor tracts up to 150 bp. Reads shorter than 40 bp were ignored. For paired-end evidence, conflicting overlapping mates were dropped.
+
+At the call stage, the mean anchor base quality had to be at least Q20 and the sum of left- and right-anchor mismatches could not exceed three. For pure repeat tracts, no more than one mismatch to the unit-aligned repeat sequence was permitted. A locus required at least eight spanning fragments. More than 30% off-unit-length evidence, a dominant allele fraction below 0.40, or a top-two-allele fraction below 0.80 rendered a locus uncallable. Strand imbalance could downgrade confidence. Minor-allele interpretation used a motif-aware noise model estimated disease-blind from invariant loci in PRJNA622860, with a safety factor applied by the frozen caller.
+
+Although development code can annotate functional-state hypotheses at suitable loci, the publication disease analysis used the dominant repeat length in base pairs and did not convert real-sample calls into ON/OFF states.
+
+### Synthetic benchmarking
+
+Synthetic benchmarking exercised the full catalogue index so that cross-member ambiguity was represented during extraction and calling. A deterministic, disease-blind subset of caller-eligible loci was selected across motif/context strata, including eligible literature-anchored loci in the curated references when possible. Synthetic samples were generated separately by source genome, using SE150 and PE250 layouts, depths of 10×, 30×, 100× and 300×, and pure or mixed allele proportions of 100:0, 90:10, 70:30 and 50:50. The empirical benchmark used the stutter model estimated from PRJNA622860; a two-fold stutter stress condition was retained as a sensitivity analysis.
+
+The primary publication metrics were exact dominant repeat-length agreement among callable comparisons and the frequency of incorrect dominant alleles among HIGH/MEDIUM-confidence calls. Numerators and denominators were reported directly. Mixture performance was considered incompletely validated and was not used to support the disease analysis.
+
+### Phase-1 short-read QC and platform/study-associated callability
+
+The disease-blind Phase-1 manifest comprised 58 BioSamples across calibration/development and post-freeze technical-transfer datasets. Fifty-five samples passed the frozen read-QC rules and three were retained with WARNING status; none failed. Disease labels were not included in caller development or platform-transfer calculations.
+
+For each locus, callability was summarized across studies and read configurations. Loci showing marked study/platform-associated callability differences were flagged as PLATFORM_CONFOUNDED_CALLABILITY. This category is descriptive: because platform, study, sample composition and other factors are entangled, it is not interpreted as a causal sequencing-platform effect.
+
+### Boundary and orthology audit
+
+All 1,405 loci underwent a disease-blind catalogue audit. For loci with multiple members, canonical motif and motif-compatible tract-length differences were required to be consistent, and coarse genomic context had to agree. Adjacent 25-bp flanks were compared in both orientations with shifts of −3 to +3 bp; pairwise support required at least 0.72 identity on both flanks in the better orientation, and the member-level homology graph had to be connected.
+
+A locus was classified ORTHOLOGY_AMBIGUOUS when orthology evidence contained unresolved ambiguity, relied on annotation/neighbourhood evidence without flank support, or included duplicate members from one reference. Singletons, short anchors or anchors containing ambiguous bases were classified INSUFFICIENT_TO_RESOLVE. With the frozen precedence rules, loci were assigned to BOUNDARY_STABLE, BOUNDARY_AMBIGUOUS, ORTHOLOGY_AMBIGUOUS or INSUFFICIENT_TO_RESOLVE. A small number of pre-specified loci with independent long-context evidence received documented technical overrides; the post-hoc tract-zone inspection for those loci was not converted into a general calling rule.
+
+### PacBio HiFi validation
+
+High-accuracy validation used five isolates from five distinct patients in GSA project PRJCA041148/CRA026546, each with a PacBio Sequel II CCS dataset and an MGISEQ-2000 paired-end short-read dataset linked to the same GSA BioSample. Selection was deterministic and disease-blind, prioritizing HiFi yield within a 15-GB acquisition bound. Author-provided assemblies polished with the same short reads were not used as truth.
+
+HiFi evidence was derived directly from raw CCS reads. Catalogue anchors were located with exact 11-mer seeding followed by banded semi-global alignment, allowing at most two edits per anchor. HIGH_CONFIDENCE_HIFI_TRUTH required at least 20 spanning HiFi reads, a dominant repeat length present in at least 90% of spanning reads, unit alignment for motifs of length at least two, and at least two dominant-allele reads from each strand. Loci with fewer than ten spanning reads or unresolved anchors were UNCALLABLE_HIFI; remaining unresolved cases with sufficient evidence were AMBIGUOUS_HIFI. Pre-specified mixture criteria could define MIXED_HIFI_TRUTH, but no such truth calls occurred in the final validation set.
+
+The primary comparison universe required a callable short-read result and high-confidence HiFi truth. Exact concordance required identical dominant repeat length; a one-base difference was not counted as exact. Reference-length and non-reference comparisons were reported separately. The 913 comparisons were treated as descriptive locus-by-isolate comparisons, not 913 independent biological replicates.
+
+### Technical locus universe
+
+Technical eligibility integrated the boundary/orthology audit, disease-blind platform/study-associated callability, motif-class validation and frozen caller eligibility. BOUNDARY_STABLE mono-A/T loci meeting the primary criteria formed the PRIMARY_TECHNICAL set. Technically eligible loci from motif classes with more limited allele-diversity evidence were retained separately as PROVISIONAL_TECHNICAL. All others were PRIMARY_INELIGIBLE. Literature prominence did not override technical exclusion.
+
+### Public-cohort confounding audit
+
+Public *H. pylori* datasets carrying Correa-stage labels were audited at BioSample and study level for disease stage, study, country, sequencing platform/layout, biopsy site, public sequence type and patient-independence evidence. The audit covered 45 studies and 793 Correa-labelled BioSamples. Cross-study disease inference was considered defensible only if the data provided actual support for separating disease stage from study/geography/platform rather than merely allowing those variables to be entered into a regression model.
+
+A disease-blind genomic structure screen based on k-mer/MinHash distances was used where a frozen sequence dataset was already available. This custom structure analysis was explicitly classified SCREENING_STRUCTURE_ONLY and was not treated as a phylogeny, formal ancestry estimate or population-structure adjustment.
+
+### Pilot disease cohorts and locus screening
+
+The frozen pilot retained two within-study contrasts and one descriptive cohort. PRJNA360417 contributed five non-atrophic gastritis (NAG) and six intestinal-metaplasia (IM) patient units to the inferential contrast; one atrophic-gastritis and one dysplasia sample were descriptive only. PRJNA678459 contributed five atrophic-gastritis (AG) and five gastric-cancer (GC) BioSamples to a standalone exploratory contrast; its disease-blind caller input had previously been bounded to 500,000 fragments per sample and was not rerun or retuned. PRJNA1103397 contributed six GC isolates reported in the source publication as one selected isolate per patient, although explicit patient identifiers were not publicly available for reconstruction; because no comparator group existed, this cohort was descriptive only.
+
+Within each contrast, a disease-blind locus screen was applied before label-based testing. A locus required callability in at least 80% of contrast samples, at least two distinct observed dominant repeat lengths and a minor-allele count of at least two. PRIMARY_TECHNICAL and PROVISIONAL_TECHNICAL loci were screened separately.
+
+### Cohort-level and locus-level pilot statistics
+
+For screened PRIMARY_TECHNICAL loci, pairwise repeat-allele-state distance was defined as the fraction of jointly callable loci at which two samples had different dominant repeat lengths. The pre-specified strict endpoint required at least ten jointly callable screened loci for every sample pair. If that floor was not met, the strict cohort endpoint was classified NOT_COMPUTABLE; a below-floor calculation could be retained only as a diagnostic.
+
+Group separation was summarized by a PERMANOVA-style pseudo-*F* and *R*² computed from the pairwise distance matrix [14]. Because sample sizes were small, exact *P* values were obtained by exhaustive enumeration of all label allocations consistent with the observed group sizes. A stratified case-resampling bootstrap with 2,000 replicates and fixed seed 88022026 was used for the diagnostic *R*² interval.
+
+At individual loci passing the disease-blind screen, the secondary endpoint was the difference in mean dominant repeat length between groups. We reported callable group sizes, medians, mean difference, Cliff's delta [15], a stratified bootstrap 95% interval for the mean difference, an exact exhaustive-label permutation *P* value and Benjamini–Hochberg *q* values within each PRIMARY cohort table [16]. PROVISIONAL loci were analyzed only as a separately labelled sensitivity set.
+
+### Reproducibility
+
+The clean publication repository contains the caller, frozen generating-source exports for manuscript-facing result families, frozen configurations, public accession manifests, tracked summary results and consistency checks. Large raw sequencing files are not versioned. The exact 17,870,238-byte Phase-1 call matrix is retained in the development archive and is identified in the publication repository by its Git blob SHA and regeneration route rather than by a zero-byte placeholder.
+
+Some historical provenance gaps remain explicit. In particular, five final G6 closure/eligibility tables were analyst/supervisor-curated from tracked upstream evidence but do not have a dedicated producing script in the historical repository. These tables are preserved and disclosed rather than retroactively represented as automatically generated. The publication CI tests the caller and verifies manuscript-facing numbers on Python 3.10–3.12; Python 3.11 is the declared current reproduction baseline.
+
+## Results
+
+### A multi-reference catalogue separates repeat discovery from evidence for phase variation
+
+The final catalogue contained 1,405 repeat loci represented by 4,009 reference-panel members. Of these loci, 1,196 had at least one caller-eligible member under the initial repeat/anchor rules. These counts define a repeat-locus catalogue, not an experimentally established phase-variable gene set.
+
+The literature reconciliation identified eight catalogue loci with KNOWN_PV annotation. Their technical properties were heterogeneous: the set included mono-A/T, mono-G/C and dinucleotide tracts, and every KNOWN_PV locus was ultimately classified PRIMARY_INELIGIBLE. This result illustrates why biological prominence and technical suitability could not be treated as interchangeable.
+
+### Boundary and orthology uncertainty removed much of the nominal catalogue
+
+The disease-blind technical audit classified 400/1,405 loci as BOUNDARY_STABLE. Forty-eight were BOUNDARY_AMBIGUOUS, 497 were ORTHOLOGY_AMBIGUOUS and 460 were INSUFFICIENT_TO_RESOLVE. Thus, the principal reduction from catalogue size to a robust analysis universe was not driven by disease association. It arose from whether the locus itself could be defined consistently across divergent references and measured with unique short-read anchors.
+
+After boundary/orthology status was combined with caller eligibility, motif-class validation and platform/study-associated callability, 261 loci entered PRIMARY_TECHNICAL, 39 entered PROVISIONAL_TECHNICAL and 1,105 were PRIMARY_INELIGIBLE. The primary set consisted of 243 REPEAT_ONLY loci, 15 STRONG_PV_CANDIDATE loci and three loci with mixed member-level evidence annotations. None of the eight literature-anchored KNOWN_PV loci entered PRIMARY_TECHNICAL (Figure 1).
+
+### Synthetic data supported conservative dominant-allele calling at callable loci
+
+The empirical synthetic benchmark contained 2,720 comparisons, of which 1,780 were callable. The dominant repeat-length allele was exact in 1,757/1,780 callable comparisons (98.7%). Among 1,595 HIGH/MEDIUM-confidence calls, 15 had an incorrect dominant allele, a false-confident wrong-dominant rate of 0.94%. The tracked overall uncallable rate was 34.56%.
+
+These values emphasize two distinct properties of the framework. Conditional accuracy was high when the technical rules yielded a call, but a substantial fraction of simulated comparisons were deliberately left uncalled. The latter is expected for a conservative caller and is important when interpreting sparse downstream disease matrices. Mixture performance remained less well supported than dominant-allele performance and was not used as the basis of the disease analysis.
+
+### Short-read calls were highly concordant with high-confidence HiFi truth, but validation coverage was uneven
+
+Across five isolates, the HiFi extraction produced 5,980 isolate-by-locus truth opportunities: 1,034 HIGH_CONFIDENCE_HIFI_TRUTH, 1,453 AMBIGUOUS_HIFI and 3,493 UNCALLABLE_HIFI. No comparison met the frozen criteria for MIXED_HIFI_TRUTH.
+
+Among high-confidence truth calls with a callable short-read result, 911/913 comparisons were exact (99.8%). This was descriptive per-comparison concordance rather than an estimate based on 913 independent biological replicates. Most comparisons were also reference-length: all 829 reference-length comparisons were exact, whereas 82/84 non-reference comparisons were exact (97.6%). The non-reference subset involved five isolates and 36 distinct loci. The two discordances in that subset therefore matter more for assessing generalization than the overall percentage alone.
+
+Motif-class evidence was similarly uneven. Mono-A/T accumulated enough non-reference evidence to support the final primary interpretation after boundary filtering, whereas other motif classes retained limitations in allele diversity. KNOWN_PV validation remained insufficient. The framework therefore used the HiFi data to constrain eligibility rather than to claim universal repeat-calling accuracy (Figure 2).
+
+### Callability was study- and platform-associated even under frozen rules
+
+The 58-sample Phase-1 set yielded 55 QC PASS and three WARNING classifications. Across the Phase-1 caller output, 909 loci were callable in at least one sample. The disease-blind technical transfer audit classified 182 loci as PLATFORM_CONFOUNDED_CALLABILITY. We use that label as shorthand for a reproducible association between callability and study/platform configuration, not as evidence that sequencing platform alone caused the difference.
+
+These callability patterns, together with the boundary/orthology audit, explain why a much smaller locus set was defensible for cross-sample analysis than the initial catalogue size might suggest. They also argue against treating missing repeat calls as ordinary missing-at-random measurements (Figure 3).
+
+### Public gastric-disease data were heavily structured by study and geography
+
+The public-data audit identified 793 Correa-labelled BioSamples across 45 studies. Forty-one of the 45 studies were single-country; four contained samples from more than one country. Disease stages were unevenly distributed across studies, and study was commonly entangled with country, sequencing configuration, biopsy information and patient-mapping quality. The available data therefore did not provide an honest cross-study disease contrast with adequate overlap in the principal confounders.
+
+This audit was the main reason not to pool public cohorts. Including study or platform as model terms would not manufacture overlap where disease stages and cohorts were structurally separated. The analysis was therefore restricted to small within-study pilots, with population structure used as a screening diagnostic rather than an adjustment claim.
+
+### Disease-blind screening left too few primary loci for the pre-specified cohort endpoint
+
+In PRJNA360417, the NAG-versus-IM contrast contained five versus six patient units. Only 4/261 PRIMARY_TECHNICAL loci passed the pre-specified callability/variability screen. Pairwise jointly callable coverage among these loci ranged from two to four, below the required floor of ten. The strict cohort-level endpoint was therefore NOT_COMPUTABLE. A below-floor diagnostic yielded pseudo-*F*=0.2992, *R*²=0.0322 and exact *P*=0.770563, but this calculation was not promoted to a primary result.
+
+In PRJNA678459, the exploratory AG-versus-GC contrast contained five versus five samples. Six of 261 PRIMARY_TECHNICAL loci and one of 39 PROVISIONAL_TECHNICAL loci passed screening. Pairwise primary coverage ranged from four to six, again below the pre-specified floor, so the strict cohort-level endpoint was NOT_COMPUTABLE. The diagnostic calculation yielded pseudo-*F*=1.9618, *R*²=0.1969 and exact *P*=0.142857.
+
+PRJNA1103397 contained six GC isolates, reported as one selected isolate per patient, but provided no within-cohort disease comparator. Zero of 261 primary loci passed the corresponding descriptive screen. No disease contrast was computed (Figure 4).
+
+### Locus-level pilot results did not provide a replicated disease signal
+
+Four PRIMARY_TECHNICAL loci were tested in PRJNA360417 and six in PRJNA678459 after the disease-blind screen. All primary Benjamini–Hochberg *q* values were 1.0. Effect estimates were small or imprecise at the available sample sizes, and bootstrap intervals for mean repeat-length differences commonly spanned zero. The one PROVISIONAL locus passing the PRJNA678459 screen remained a labelled sensitivity result and was not promoted into the primary family.
+
+No independent replication cohort satisfying the frozen patient-independence and confounding criteria was available. The pilot therefore does not establish either a positive or negative general association between repeat-length state and gastric-disease progression; it shows that the planned inference is not supported by the effective information content of these public cohorts.
+
+### Screening-level population structure reinforced the confounding caution
+
+A frozen disease-blind read-based k-mer/MinHash distance matrix was available for the ten PRJNA678459 samples. Overlaying AG/GC labels gave pseudo-*F*=1.0506, *R*²=0.1161 and an exact *P*=0.031746 across 252 label permutations. This result is a **confounding caution flag**: it indicates that disease labels were associated with the available screening-level structure metric in this small cohort. It is not a repeat-locus finding and does not constitute ancestry adjustment.
+
+No equivalent disease-blind structure result had been generated for PRJNA360417 before the analysis freeze. Its structure overlay therefore remains NOT_PERFORMED and is retained as a limitation rather than reconstructed post hoc.
+
+## Discussion
+
+The central technical result is that repeat-length profiling from public *H. pylori* short reads can be highly accurate at a deliberately restricted set of loci, but the restriction is scientifically consequential. Synthetic and HiFi comparisons both showed high exact concordance conditional on a technically valid call. At the same time, boundary ambiguity, orthology ambiguity, anchor uniqueness, motif-specific evidence, read configuration and study-associated callability removed most catalogue loci from the final primary universe. The resulting method is conservative by design.
+
+This distinction is especially important for phase-variation biology. Classical *H. pylori* work established that repeat tracts can mediate reversible expression changes at specific loci [6–11]. That does not imply that every discovered repeat tract is phase variable, nor that a repeat length measured in a short-read sample can automatically be translated into a functional ON/OFF state. Our catalogue therefore separates repeat discovery from evidence annotation, and the disease analysis uses repeat-length alleles rather than inferred functional states. The fact that none of the eight literature-anchored KNOWN_PV catalogue loci entered PRIMARY_TECHNICAL is not a contradiction. It means that the loci with the strongest prior biological interest were not necessarily the loci that could be measured most defensibly across heterogeneous short-read datasets under the frozen rules.
+
+The validation data support a similarly qualified interpretation. The overall HiFi concordance of 911/913 is numerically strong, but most comparisons matched the panel reference length and the observations are clustered by isolate and locus. The 82/84 exact result among non-reference comparisons is more informative about repeat-length generalization and still supports the caller at resolvable loci, but its denominator is modest. Mixture truth was absent, KNOWN_PV truth was insufficient, and the five-isolate HiFi set provides limited geographic and platform diversity. We therefore regard the HiFi experiment as an orthogonal technical validation of dominant repeat-length calling, not a universal performance certificate.
+
+The boundary/orthology audit was as important as the read-level caller. In a multi-reference bacterial analysis, a highly supported call can still be biologically misleading if the reference members grouped under one locus are not genuinely comparable or if tract boundaries shift among paralogous contexts. Nearly one third of the catalogue was classified ORTHOLOGY_AMBIGUOUS, and another large fraction was insufficient to resolve. This result argues for treating locus definition as part of variant calling rather than as a fixed upstream annotation.
+
+Public-cohort structure was the dominant limitation on the original biological hypothesis. *H. pylori* populations track human geography and are reshaped by recombination [3,4], so disease comparisons that are also comparisons between countries or studies are particularly vulnerable to confounding. In the audited public data, 41 of 45 Correa-labelled studies were single-country and disease-stage representation was strongly study-dependent. The correct response was not to pool all samples and add study as a covariate. Without overlap, such a model would rely on extrapolation rather than within-stratum support.
+
+Restricting the analysis to within-study contrasts solved only part of that problem. The two available contrasts were extremely small, and the combination of conservative calling and within-cohort repeat polymorphism left four and six screened primary loci. That information density was below the pre-specified ten-locus pairwise floor. Classifying the strict endpoints as NOT_COMPUTABLE was therefore preferable to weakening the floor after viewing the data. The below-floor diagnostic values and locus-level tests are retained for transparency, but they cannot carry the biological conclusion.
+
+The nominal association between disease labels and the PRJNA678459 screening-structure metric further limits interpretation. Its exact *P* value is not evidence about repeat loci; it signals that AG and GC labels were not independent of the available whole-genome structure proxy. Because the method was a bounded k-mer/MinHash screen rather than a validated ancestry model, we did not fit a multivariable “adjusted” disease association and do not claim correction for population structure. The absence of an analogous PRJNA360417 structure result is an additional asymmetry.
+
+The original hypothesis—that distinct *H. pylori* populations might converge on reversible functional states during gastric carcinogenesis—therefore remains unresolved rather than falsified. A definitive test would require prospectively suitable or newly assembled datasets with independent patients, explicit disease-stage and biopsy metadata, adequate within-study stage overlap, broader geography, sufficient repeat-locus callability, and a replication cohort not reused for discovery. Long-read or hybrid sequencing would be particularly valuable for loci that are biologically compelling but technically excluded here. Importantly, those requirements follow from the failure modes identified before or independently of final disease association; they are not post-hoc criteria chosen to recover significance.
+
+The study has several additional limitations. The historical development environment was not completely pinned, although the publication package provides a newly tested environment and machine-checked manuscript numbers. Some final G6 eligibility tables were curated closure products without dedicated generating scripts; their upstream evidence and frozen content are preserved, but provenance is not fully automated. The Phase-1 call matrix is large and is identified by exact archive blob metadata rather than duplicated in the clean repository. The synthetic error/stutter model cannot reproduce every laboratory and instrument-specific artefact. Finally, public metadata quality itself is variable, and explicit patient identifiers were unavailable for some otherwise informative studies.
+
+These limitations do not negate the technical validation. They define the domain in which the framework should be used: conservative repeat-length profiling at loci that are demonstrably anchorable and orthologically interpretable, with locus-level and cohort-level missingness treated as technical information rather than ignored. Under those constraints, short-read data can recover dominant repeat lengths accurately. The harder problem for the original biological question is assembling cohorts in which those measurements are sufficiently dense, independent and unconfounded to support inference.
+
+## Conclusions
+
+A multi-reference, spanning-read framework can measure dominant *H. pylori* repeat-length alleles with high exact concordance at technically resolvable loci, including non-reference alleles supported by PacBio HiFi truth. Most discovered repeat loci, however, do not satisfy the combined requirements for boundary stability, orthology, callability and motif-specific validation, and literature-established phase-variable loci are not automatically technically tractable.
+
+Applying the frozen framework to current public gastric-disease datasets did not yield a definitive carcinogenesis analysis. The available within-study contrasts retained too few jointly callable polymorphic primary loci for the pre-specified cohort endpoint, cross-study pooling was confounded by study/geography, and no independent replication set was available. The appropriate conclusion is therefore methodological: reliable repeat-length measurement is feasible for a restricted locus universe, whereas the original disease-association hypothesis remains unresolved with the public data examined here.
+
+## Data Availability
+
+This study reanalyzes publicly archived *H. pylori* sequencing datasets. The publication repository records the accession manifests used for the Phase-1 short-read datasets, Stage-A validation data and the PacBio HiFi/MGISEQ validation set, including checksums or source metadata where available. Raw sequencing files are not redistributed.
+
+A complete accession-level data statement will be generated from the tracked manifests at submission. The principal manifests are:
+
+- `metadata/cohorts/phase1_download_manifest.tsv`
+- `metadata/validation/stageA_manifest.tsv`
+- `metadata/validation/hifi_manifest.tsv`
+
+## Code Availability
+
+The publication-facing repository is `kgurgen97/hp-phase-variation`. It contains the short-read caller, frozen configurations, curated generating-source exports, manuscript-facing results, reproducibility manifests and automated numerical checks. The repository is currently under submission preparation and should be made publicly accessible or archived with a persistent identifier before publication.
+
+The development-history repository is not intended as the publication artifact. The clean repository explicitly records dependencies that require external public data and the provenance limitations of historical curated closure tables.
+
+## Author Contributions
+
+**Conceptualization:** [TO BE COMPLETED]  
+**Methodology:** [TO BE COMPLETED]  
+**Software:** [TO BE COMPLETED]  
+**Validation:** [TO BE COMPLETED]  
+**Formal analysis:** [TO BE COMPLETED]  
+**Investigation:** [TO BE COMPLETED]  
+**Data curation:** [TO BE COMPLETED]  
+**Writing – original draft:** [TO BE COMPLETED]  
+**Writing – review and editing:** [TO BE COMPLETED]  
+**Visualization:** [TO BE COMPLETED]  
+**Supervision:** [TO BE COMPLETED]
+
+## Funding
+
+[TO BE COMPLETED]
+
+## Competing Interests
+
+The authors declare [TO BE COMPLETED].
+
+## Ethics and Data-Use Statement
+
+No new human participants were recruited and no new biological specimens were collected. The study used publicly archived bacterial sequencing data and associated public metadata. Patient-level identifiers were not invented when they were absent from source records. Disease classifications were retained as UNKNOWN/NA when the available sources did not support a more specific assignment. Any ethics approvals governing original sample collection remain those of the source studies.
+
+## Figure Legends
+
+**Figure 1. From repeat catalogue to the final technical locus universe.**  
+(A) Multi-reference repeat-locus catalogue and initial caller eligibility. (B) Disease-blind boundary/orthology audit showing BOUNDARY_STABLE, BOUNDARY_AMBIGUOUS, ORTHOLOGY_AMBIGUOUS and INSUFFICIENT_TO_RESOLVE classes. (C) Final PRIMARY_TECHNICAL, PROVISIONAL_TECHNICAL and PRIMARY_INELIGIBLE sets. (D) Evidence-class composition of PRIMARY_TECHNICAL. Evidence class and technical eligibility are separate dimensions: none of the eight literature-anchored KNOWN_PV loci entered PRIMARY_TECHNICAL.
+
+**Figure 2. Technical validation of dominant repeat-length allele calling.**  
+(A) Empirical synthetic exact dominant-allele concordance, 1,757/1,780 callable comparisons (98.7%). (B) Incorrect dominant allele among HIGH/MEDIUM-confidence synthetic calls, 15/1,595 (0.94%). (C) Phase-1 sample/locus callability under frozen rules. (D) Exact short-read versus high-confidence PacBio HiFi concordance, 911/913 comparisons (99.8%). (E) Reference-length and non-reference HiFi subsets: 829/829 and 82/84 exact, respectively. (F) HiFi truth availability across 5,980 isolate×locus pairs. HiFi comparison counts are not independent biological replicates; most comparisons are reference-length, and KNOWN_PV and mixture validation remain insufficient.
+
+**Figure 3. Technical failure modes define the usable repeat-locus universe.**  
+Boundary ambiguity, orthology ambiguity, insufficient evidence to resolve locus correspondence and platform/study-confounded callability exclude large parts of the catalogue from primary cross-sample analysis. The 182 loci with platform/study-confounded callability are shown as a technical association rather than a causal platform effect. Literature-established phase-variable loci are shown separately to emphasize that biological evidence does not override technical exclusion.
+
+**Figure 4. Public gastric-disease cohorts as a stress test of the frozen framework.**  
+(A) Distribution of Correa-stage labels across 45 studies and 793 BioSamples; 41/45 studies are single-country. (B) Study/geography/platform structure of the public dataset. (C) Within-study pilot contrasts and disease-blind locus-screen attrition. PRJNA360417 NAG versus IM included 5 versus 6 patient units and retained 4/261 primary loci; PRJNA678459 AG versus GC included 5 versus 5 samples and retained 6/261 primary plus 1/39 provisional locus; PRJNA1103397 was GC-only and had no contrast. (D) Both inferential contrasts failed the pre-specified ≥10 jointly callable loci per sample-pair floor, so the strict cohort-level endpoints were NOT_COMPUTABLE. Diagnostic exact *P* values are displayed only as secondary context. (E) PRJNA678459 SCREENING_STRUCTURE_ONLY diagnostic (pseudo-*F*=1.0506, *R*²=0.1161, exact *P*=0.031746; 252 permutations) is a confounding caution flag. PRJNA360417 structure was NOT_PERFORMED.
+
+## Table Legends
+
+**Table 1. Catalogue, validation and final technical-universe summary.**  
+Manuscript-facing counts for repeat discovery, caller eligibility, boundary/orthology status, final technical locus classes, empirical synthetic benchmarking and PacBio HiFi validation. Numerators and denominators are shown for validation proportions.
+
+**Table 2. Public cohort and confounding audit.**  
+Study-level disease-stage composition, geography, sequencing configuration, patient-independence evidence and the classification of candidate disease contrasts. Cross-study contrasts are not used for inference when disease stage lacks overlap across major confounders.
+
+**Table 3. Frozen pilot disease-analysis summary.**  
+Within-cohort sample sizes, number of screened PRIMARY_TECHNICAL and PROVISIONAL_TECHNICAL loci, pairwise callable-locus coverage, strict endpoint computability and below-floor diagnostic statistics. Diagnostic values are not substitutes for the non-computable strict endpoints.
+
+## Supplement Plan
+
+**Supplementary Methods.** Detailed repeat-discovery rules; caller extraction and callability rules; empirical stutter model; synthetic simulation design; boundary/orthology audit algorithm; HiFi truth definition; technical-universe construction; public-metadata harmonization rules; pilot screen and exact permutation procedures; reproducibility environment and provenance boundary.
+
+**Supplementary Table S1.** Eight-genome reference panel and assembly accessions.  
+**Supplementary Table S2.** Full 1,405-locus repeat catalogue with evidence annotations.  
+**Supplementary Table S3.** Boundary/orthology audit for all catalogue loci.  
+**Supplementary Table S4.** Final locus analysis universe with PRIMARY_TECHNICAL, PROVISIONAL_TECHNICAL and PRIMARY_INELIGIBLE classes.  
+**Supplementary Table S5.** Synthetic benchmark strata and performance.  
+**Supplementary Table S6.** PacBio HiFi truth and short-read comparison strata, including non-reference alleles.  
+**Supplementary Table S7.** Phase-1 sample QC and study/platform-associated callability.  
+**Supplementary Table S8.** Correa-labelled study/BioSample confounding audit.  
+**Supplementary Table S9.** Frozen pilot locus-screen results.  
+**Supplementary Table S10.** PRJNA360417 locus-level primary results.  
+**Supplementary Table S11.** PRJNA678459 locus-level primary results and separately labelled provisional sensitivity result.  
+**Supplementary Table S12.** Reproducibility status of manuscript-facing result families and external-data dependencies.
+
+**Supplementary Figure S1.** Catalogue motif, tract-length and context distributions.  
+**Supplementary Figure S2.** Synthetic benchmark performance by layout, depth and motif/context stratum.  
+**Supplementary Figure S3.** HiFi concordance by isolate, motif class and tract-length bin.  
+**Supplementary Figure S4.** Phase-1 sample-level callability and depth summaries.  
+**Supplementary Figure S5.** Study-by-disease-stage matrix for all audited Correa-labelled studies.  
+**Supplementary Figure S6.** PRJNA678459 screening-level structure matrix/ordination with disease labels overlaid after disease-blind structure calculation.
+
+## References
+
+1. Correa P. Human gastric carcinogenesis: a multistep and multifactorial process. *Cancer Res*. 1992;52:6735–6740. PMID: 1458460.
+2. IARC Working Group on the Evaluation of Carcinogenic Risks to Humans. Schistosomes, liver flukes and *Helicobacter pylori*. *IARC Monogr Eval Carcinog Risks Hum*. 1994;61:1–241.
+3. Falush D, Wirth T, Linz B, et al. Traces of human migrations in *Helicobacter pylori* populations. *Science*. 2003;299:1582–1585. doi:10.1126/science.1080857.
+4. Suerbaum S, Josenhans C. *Helicobacter pylori*: recombination, population structure and human migrations. *Int J Med Microbiol*. 2004;294:133–139. PMID: 15493823.
+5. Kennemann L, Didelot X, Aebischer T, et al. *Helicobacter pylori* genome evolution during human infection. *Proc Natl Acad Sci USA*. 2011;108:5033–5038. doi:10.1073/pnas.1018444108.
+6. Saunders NJ, Peden JF, Hood DW, Moxon ER. Simple sequence repeats in the *Helicobacter pylori* genome. *Mol Microbiol*. 1998;27:1091–1098. doi:10.1046/j.1365-2958.1998.00768.x.
+7. Salaün L, Linz B, Suerbaum S, Saunders NJ. The diversity within an expanded and redefined repertoire of phase-variable genes in *Helicobacter pylori*. *Microbiology (Reading)*. 2004;150:817–830. doi:10.1099/mic.0.26993-0.
+8. Appelmelk BJ, Martin SL, Monteiro MA, et al. Phase variation in *Helicobacter pylori* lipopolysaccharide due to changes in the lengths of poly(C) tracts in alpha3-fucosyltransferase genes. *Infect Immun*. 1999;67:5361–5366. doi:10.1128/IAI.67.10.5361-5366.1999.
+9. Goodwin AC, Weinberger DM, Ford CB, et al. Expression of the *Helicobacter pylori* adhesin SabA is controlled via phase variation and the ArsRS signal transduction system. *Microbiology (Reading)*. 2008. PMID: 18667556.
+10. de Vries N, Duinsbergen D, Kuipers EJ, et al. Transcriptional phase variation of a type III restriction-modification system in *Helicobacter pylori*. *J Bacteriol*. 2002;184:6615–6624. doi:10.1128/JB.184.23.6615-6624.2002.
+11. Srikhanta YN, Gorrell RJ, Steen JA, et al. Phasevarion mediated epigenetic gene regulation in *Helicobacter pylori*. *PLoS One*. 2011;6:e27569. doi:10.1371/journal.pone.0027569.
+12. Treangen TJ, Salzberg SL. Repetitive DNA and next-generation sequencing: computational challenges and solutions. *Nat Rev Genet*. 2012;13:36–46. PMID: 22124482.
+13. Tanudisastro HA, Deveson IW, Dashnow H, et al. Sequencing and characterizing short tandem repeats in the human genome. *Nat Rev Genet*. 2024;25:460–475. doi:10.1038/s41576-024-00692-3.
+14. Anderson MJ. A new method for non-parametric multivariate analysis of variance. *Austral Ecol*. 2001;26:32–46. doi:10.1111/j.1442-9993.2001.01070.pp.x.
+15. Cliff N. Dominance statistics: ordinal analyses to answer ordinal questions. *Psychol Bull*. 1993;114:494–509. doi:10.1037/0033-2909.114.3.494.
+16. Benjamini Y, Hochberg Y. Controlling the false discovery rate: a practical and powerful approach to multiple testing. *J R Stat Soc Series B*. 1995;57:289–300. doi:10.1111/j.2517-6161.1995.tb02031.x.
