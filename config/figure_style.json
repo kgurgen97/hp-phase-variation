@@ -1,0 +1,82 @@
+{
+  "style_name": "bostongene_reference_derived",
+  "version": "1.0",
+  "scope": "Project A publication figures",
+  "reference_note": "Palette is sampled/approximated from published raster figures and the public BostonGene MFP visual language; it is not claimed to be an official corporate brand palette.",
+  "references": [
+    {
+      "citation": "Bagaev et al. Cancer Cell 2021;39:845-865.e7",
+      "doi": "10.1016/j.ccell.2021.04.014",
+      "role": "multi-panel layout, categorical TME palette, heatmap/annotation discipline"
+    },
+    {
+      "citation": "Yudina et al. Communications Medicine 2025;5:236",
+      "doi": "10.1038/s43856-025-00934-3",
+      "role": "technical validation panels, muted blue/pink/purple palette, thin axes and dense annotation"
+    },
+    {
+      "citation": "Stupichev et al. Cell Reports Medicine 2025;6:102299",
+      "doi": "10.1016/j.xcrm.2025.102299",
+      "role": "heatmaps, responder/validation panels, categorical accents, compact multi-panel composition"
+    }
+  ],
+  "palette": {
+    "background": "#FFFFFF",
+    "off_white": "#FAFAF8",
+    "text": "#252525",
+    "axis": "#4A4A4A",
+    "grid": "#E6E8EB",
+    "primary_blue": "#547FCE",
+    "primary_blue_dark": "#3458A4",
+    "provisional_teal": "#63B6A5",
+    "candidate_magenta": "#D66F91",
+    "known_pv_gold": "#E3A23A",
+    "ambiguity_purple": "#8B78BD",
+    "warning_coral": "#CF7068",
+    "support_green": "#70A985",
+    "neutral_gray": "#A7ADB4",
+    "ineligible_gray": "#D2D5D9",
+    "light_blue": "#A7BFE8",
+    "light_pink": "#E7A6B8"
+  },
+  "semantic_mapping": {
+    "PRIMARY_TECHNICAL": "primary_blue",
+    "PROVISIONAL_TECHNICAL": "provisional_teal",
+    "PRIMARY_INELIGIBLE": "ineligible_gray",
+    "REPEAT_ONLY": "neutral_gray",
+    "STRONG_PV_CANDIDATE": "candidate_magenta",
+    "KNOWN_PV": "known_pv_gold",
+    "BOUNDARY_STABLE": "primary_blue",
+    "BOUNDARY_AMBIGUOUS": "warning_coral",
+    "ORTHOLOGY_AMBIGUOUS": "ambiguity_purple",
+    "INSUFFICIENT_TO_RESOLVE": "neutral_gray",
+    "reference_length": "light_blue",
+    "nonreference_length": "candidate_magenta",
+    "warning": "warning_coral",
+    "null_or_not_computable": "neutral_gray"
+  },
+  "matplotlib": {
+    "font_family": "DejaVu Sans",
+    "font_size": 8.0,
+    "axes_labelsize": 8.0,
+    "axes_titlesize": 9.0,
+    "xtick_labelsize": 7.0,
+    "ytick_labelsize": 7.0,
+    "legend_fontsize": 7.0,
+    "axes_linewidth": 0.6,
+    "tick_width": 0.6,
+    "grid_linewidth": 0.4,
+    "panel_label_size": 11.0,
+    "dpi": 300,
+    "savefig_bbox": "tight"
+  },
+  "rules": [
+    "Use white/off-white backgrounds and thin axes.",
+    "Do not use seaborn defaults or decorative gradients.",
+    "Use the same semantic color for the same concept across all figures.",
+    "Show numerator and denominator directly for validation metrics when possible.",
+    "Do not visually rescue null, non-computable, or low-power disease results.",
+    "Use saturated accent colors only for technically meaningful contrasts or validated signal.",
+    "Panel labels are bold uppercase letters aligned consistently at top-left."
+  ]
+}
